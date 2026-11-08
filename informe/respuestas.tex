@@ -282,13 +282,270 @@ Algunas recomendaciones
 \seccion{(c) Regularización de Tikhonov}
 
 \begin{enumerate}[label=\roman*., widest=iv]
+
   \item \textbf{Gradiente, Hessiana y único minimizador global.}
 
-  \pendiente
+  Para \(\lambda > 0\) consideramos la función:
+
+  \[
+  J_\lambda(x)=\|Ax-b\|_2^2+\lambda\|x\|_2^2
+  \]
+
+  \subsubsection*{• Cálculo del gradiente}
+
+  Para calcular el gradiente, necesitamos derivar cada término de la función respecto del vector \(x\). En primer lugar, podemos notar que el primer término de \(J_\lambda(x)\) corresponde a la función \(J_0(x)\) analizada en la parte (a). Por lo tanto, sabemos que:
+
+  \[
+  J_0(x)=\|Ax-b\|_2^2
+  \implies
+  \nabla J_0(x)=2A^T(Ax-b)
+  \]
+
+  Para el segundo término de la función, utilizamos la propiedad de la norma euclidiana al cuadrado (\(\|x\|_2^2=x^Tx\)) para reescribirlo y facilitar el cálculo de su gradiente:
+
+  \[
+  \lambda\|x\|_2^2=\lambda x^Tx
+  \]
+
+  Como \(\lambda\) es una constante, al derivar respecto de \(x\) obtenemos:
+
+  \[
+  \nabla(\lambda x^Tx)=2\lambda x
+  \]
+
+  Sumando los gradientes de cada término, obtenemos que el gradiente de \(J_\lambda\) es:
+
+  \[
+  \boxed{\nabla J_\lambda(x)=2A^T(Ax-b)+2\lambda x}
+  \]
+
+  \subsubsection*{• Cálculo de la Matriz Hessiana}
+
+  Para calcular la matriz Hessiana, debemos encontrar las segundas derivadas parciales de una función. En este caso, \(J_\lambda\) depende del vector \(x\), podemos obtener la Hessiana derivando el gradiente respecto de \(x\), considerando que las matrices \(A\) y \(A^T\), el vector \(b\) y el parámetro \(\lambda\) son constantes.
+
+  Como la derivada de \(2A^T(Ax-b)\) es \(2A^TA\) y la derivada de \(2\lambda x\) es \(2\lambda I\), la matriz Hessiana es:
+
+  \[
+  \boxed{H_{J_\lambda}=2A^TA+2\lambda I}
+  \]
+
+  \subsubsection*{• Valores propios de \(H_{J_\lambda}\)}
+
+  Para demostrar que todos los valores propios de \(H_{J_\lambda}\) son mayores o iguales que \(2\lambda\), analizaremos cómo actúan los vectores propios de la Hessiana. Dado que \(H_{J_\lambda}=2(A^TA+\lambda I)\), y considerando que sumar un múltiplo de la matriz identidad no altera los vectores propios de una matriz, podemos usar directamente los vectores propios de \(A^TA\).
+
+  Para ello, consideraremos que los vectores propios de \(A^TA\) cumplen con la propiedad \((A^TA)v_i=\mu_i v_i\), donde \(v_i\) es un vector propio no nulo y \(\mu_i\) su valor propio asociado. A partir de esta propiedad, evaluamos la Hessiana y obtenemos que:
+
+  \[
+  \begin{aligned}
+  H_{J_\lambda}v_i
+  &=2(A^TA+\lambda I)v_i\\
+  &=2(A^TAv_i+\lambda v_i)\\
+  &=2(\mu_i v_i+\lambda v_i)\\
+  &=2(\mu_i+\lambda)v_i
+  \end{aligned}
+  \]
+
+  Con este resultado, confirmamos que \(v_i\) también es un vector propio de \(H_{J_\lambda}\) y que su valor propio asociado es \(2(\mu_i+\lambda)\).
+
+  Como en el ítem (a).ii se demostró que \(A^TA\) es una matriz semidefinida positiva, sabemos que sus valores propios cumplen con \(\mu_i\geq0\). Además, considerando que por enunciado sabemos que \(\lambda>0\), concluimos que:
+
+  \[
+  \boxed{2(\mu_i+\lambda)\geq2\lambda}
+  \]
+
+  De esta manera, queda demostrado que todos los valores propios de la matriz \(H_{J_\lambda}\) son mayores o iguales que \(2\lambda\).
+
+  \subsubsection*{• Unicidad y existencia del minimizador global}
+
+  Para demostrar que la función \(J_\lambda(x)\) tiene un único minimizador global, partiremos de que \(H_{J_\lambda}\) es definida positiva ya que todos sus valores propios son estrictamente positivos. Esto implica que la función es estrictamente convexa, lo que nos permite asegurar que, de existir un punto crítico, este será único y corresponderá al mínimo global.
+
+  Para encontrar este punto, igualaremos el gradiente calculado en un inicio a cero:
+
+  \[
+  \nabla J_\lambda(x)=2A^T(Ax-b)+2\lambda x=0
+  \]
+
+  Simplificamos dividiendo por \(2\) y reordenamos términos:
+
+  \[
+  \begin{aligned}
+  A^T(Ax-b)+\lambda x&=0\\
+  A^TAx-A^Tb+\lambda x&=0\\
+  A^TAx+\lambda x&=A^Tb\\
+  (A^TA+\lambda I)x&=A^Tb
+  \end{aligned}
+  \]
+
+  Como los valores propios de \((A^TA+\lambda I)\) son estrictamente positivos, la matriz es invertible. Al multiplicar por su inversa, despejamos la solución única:
+
+  \[
+  \boxed{x_\lambda=(A^TA+\lambda I)^{-1}A^Tb}
+  \]
+
+  Con esto se concluye que \(J_\lambda(x)\) tiene un único minimizador global, y es \(x_\lambda\).
+
+  \bigskip
 
   \item \textbf{Descomposición de $\ip{x_\lambda}{v_i}$ y cota del aporte del ruido.}
 
-  \pendiente
+  \subsubsection*{• Descomposición de $\ip{x_\lambda}{v_i}$}
+
+  Para realizar la primera demostración, partiremos de la ecuación obtenida en el ítem (c).i:
+
+  \[
+  x_\lambda=(A^TA+\lambda I)^{-1}A^Tb
+  \]
+
+  Como sabemos que \(b=Ax^\star+\eta\), sustituimos esta expresión en la fórmula de \(x_\lambda\):
+
+  \[
+  \begin{aligned}
+  x_\lambda&=(A^TA+\lambda I)^{-1}A^T(Ax^\star+\eta)\\
+  &=(A^TA+\lambda I)^{-1}A^TAx^\star+(A^TA+\lambda I)^{-1}A^T\eta
+  \end{aligned}
+  \]
+
+  A continuación, calcularemos el producto interno de \(\langle x_\lambda,v_i\rangle\). Para esto, reemplazamos la expresión de \(x_\lambda\) y distribuimos la suma por linealidad (\(\langle a+b,c\rangle=\langle a,c\rangle+\langle b,c\rangle\)):
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle (A^TA+\lambda I)^{-1}A^TAx^\star+(A^TA+\lambda I)^{-1}A^T\eta,v_i\right\rangle\\
+  &=\left\langle (A^TA+\lambda I)^{-1}A^TAx^\star,v_i\right\rangle+\left\langle (A^TA+\lambda I)^{-1}A^T\eta,v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Luego, trasladamos la matriz al segundo argumento mediante la propiedad \(\langle Mu, v \rangle = \langle u, M^T v \rangle\). Como \((A^T A + \lambda I)^{-1}\) es simétrica, su tranpuesta es igual a si misma:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle A^TAx^\star,(A^TA+\lambda I)^{-1}v_i\right\rangle+\left\langle A^T\eta,(A^TA+\lambda I)^{-1}v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Como \(v_i\) es un vector propio de \(A^TA\), tal que \(A^TAv_i=\mu_i v_i\). Al sumar \(\lambda I\), obtenemos:
+
+  \[
+  \begin{aligned}
+  (A^TA+\lambda I)v_i
+  &=A^TAv_i+\lambda Iv_i\\
+  &=\mu_i v_i+\lambda v_i\\
+  &=(\mu_i+\lambda)v_i
+  \end{aligned}
+  \]
+
+  \bigskip
+
+  Como \(\mu_i+\lambda>0\), podemos multiplicar por la inversa y despejar:
+
+  \[
+  (A^TA+\lambda I)^{-1}v_i=\frac{1}{\mu_i+\lambda}v_i
+  \]
+
+  Reemplazamos esta expresión en los productos internos:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle A^TAx^\star,\frac{1}{\mu_i+\lambda}v_i\right\rangle+\left\langle A^T\eta,\frac{1}{\mu_i+\lambda}v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Aplicando la propiedad \(\langle a,cv\rangle=c\langle a,v\rangle\), sacamos los escalares de los productos internos y volviendo a utilizar \(\langle Mu,v\rangle=\langle u,M^Tv\rangle\) para trasladar las matrices restantes (teniendo en cuenta que, \(A^TA\) es simétrica, y que la transpuesta de \(A^T\) es \(A\)), obtenemos:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\frac{1}{\mu_i+\lambda}\langle x^\star,A^TAv_i\rangle+\frac{1}{\mu_i+\lambda}\langle\eta,Av_i\rangle
+  \end{aligned}
+  \]
+
+  Por último, reemplazamos \(A^TAv_i=\mu_i v_i\), sacamos el escalar \(\mu_i\) y aplicamos la propiedad de simetría del producto interno \(\langle a,b\rangle=\langle b,a\rangle\):
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\frac{1}{\mu_i+\lambda}\langle x^\star,\mu_i v_i\rangle+\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\\
+  &=\frac{\mu_i}{\mu_i+\lambda}\langle x^\star,v_i\rangle+\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}
+  \end{aligned}
+  \]
+
+  De esta manera, queda demostrado que:
+
+  \[
+  \boxed{
+  \langle x_\lambda,v_i\rangle
+  =
+  \frac{\mu_i}{\mu_i+\lambda}\langle x^\star,v_i\rangle
+  +
+  \frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}
+  }
+  \]
+
+  \subsubsection*{• Cota aporte de ruido}
+
+  Para realizar la segunda demostración, partiremos del término asociado ruido obtenido en la primera igualdad:
+
+  \[
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \]
+
+  Utilizaremos la desigualdad de Cauchy-Schwarz, que establece que \(|\langle u,v\rangle|\leq\|u\|_2\|v\|_2\). Aplicando esta propiedad al producto interno \(\langle Av_i,\eta\rangle\), obtenemos:
+
+  \[
+  \begin{aligned}
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  =\frac{|\langle Av_i,\eta\rangle|}{\mu_i+\lambda}\
+  \leq\frac{\|Av_i\|_2\|\eta\|_2}{\mu_i+\lambda}
+  \end{aligned}
+  \]
+
+  Para calcular la norma de \(Av_i\), partiremos de su cuadrado (\(\|u\|_2^2=u^Tu\)), y aplicaremos la relación del vector propio \(A^TAv_i=\mu_i v_i\):
+
+  \[
+  \begin{aligned}
+  \|Av_i\|_2^2
+  &=(Av_i)^T(Av_i)\\
+  &=v_i^TA^TAv_i\\
+  &=v_i^T(\mu_i v_i)\\
+  &=\mu_i v_i^Tv_i
+  \end{aligned}
+  \]
+
+  Como los vectores propios \(v_i\) son unitarios, sabemos que \(v_i^Tv_i=\|v_i\|_2^2=1\). Por lo tanto:
+
+  \[
+  \|Av_i\|_2=\sqrt{\mu_i}
+  \]
+
+  Reemplazando este resultado en la desigualdad anterior, obtenemos:
+
+  \[
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \leq\frac{\sqrt{\mu_i}\|\eta\|_2}{\mu_i+\lambda}
+  \]
+
+  Ahora aplicando la desigualdad \(\mu_i+\lambda\geq 2\sqrt{\mu_i\lambda}\) para acotar el denominador:
+
+  \[
+  \begin{aligned}
+  \frac{\sqrt{\mu_i}}{\mu_i+\lambda}
+  \leq\frac{\sqrt{\mu_i}}{2\sqrt{\mu_i\lambda}}\
+  =\frac{1}{2\sqrt{\lambda}}
+  \end{aligned}
+  \]
+
+  Por lo tanto, sustituyendo esto en la expresión anterior, queda demostrado que:
+
+  \[
+  \boxed{
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \leq\frac{\|\eta\|_2}{2\sqrt{\lambda}}
+  }
+  \]
+
+  Esta cota depende únicamente de la norma del ruido y del parámetro \(\lambda\), por lo que se mantiene válida sin importar qué tan pequeño sea \(\mu_i\).
 
   \item \textbf{Interpretación.}
 

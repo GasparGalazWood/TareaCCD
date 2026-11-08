@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794158869.21062 "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" "respuestas.pdf" "respuestas" 1794158872.08018 0
+["pdflatex"] 1794167201.31422 "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" "respuestas.pdf" "respuestas" 1794167204.48891 0
   "C:/Users/alond/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1794153695 215428 548f42868854776baa1d44e36d05f106 ""
   "C:/Users/alond/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1773771601 13333849 5ea4058a98cd1d18c2a9e34939cd5c44 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/dejavu/dejavumono_t1-type1.enc" 1379890442 2620 1ef8c8026e6f0fc7a8bfd158c7dfbe38 ""
@@ -40,7 +40,9 @@
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/tfm/public/libertinus-type1/LibertinusSerif-Regular-tlf-t1.tfm" 1727020299 19260 23a3b2196ddead7d519ade3691097bba ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/tfm/public/libertinus-type1/LibertinusSerif-Regular-tlf-ts1--base.tfm" 1727020301 1388 07aaed408372eb9416ac6095d4eab065 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/tfm/public/libertinus-type1/LibertinusSerif-Regular-tlf-ts1.tfm" 1727020301 1396 9e09fdea098b5be68e4859195e5f9726 ""
+  "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1247596667 30251 6afa5cb1d0204815a708a080681d4674 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1247596666 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1247596666 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1247596667 32734 69e00a6b65cedb993666e42eedb3d48f ""
@@ -243,13 +245,13 @@
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" 1794158868 16589 d21142057a781d1863d3a16340cb0987 ""
+  "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" 1794167200 26217 6e3ec5b0fd88c45fe66b85a492c7a708 ""
   "figuras/ejemplo_b.png" 1794152465 19137 b7d9da2e8afe63867c777b930744e0cb ""
   "figuras/reconstruccion_b.png" 1794151173 29746 5bd618aafa5258d8ec50e40aeeb252d4 ""
   "plantilla.sty" 1794152465 17912 54c96207a512adf1664dc503fbd6044d ""
-  "respuestas.aux" 1794158871 1522 148761676cbb782893c22bf92508f7c9 "pdflatex"
-  "respuestas.out" 1794158870 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "respuestas.tex" 1794158868 16589 d21142057a781d1863d3a16340cb0987 ""
+  "respuestas.aux" 1794167203 1526 2341add3c4a07f72e0b0f21f970ae979 "pdflatex"
+  "respuestas.out" 1794167203 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "respuestas.tex" 1794167200 26217 6e3ec5b0fd88c45fe66b85a492c7a708 ""
   (generated)
   "respuestas.aux"
   "respuestas.log"
