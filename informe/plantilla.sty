@@ -1,0 +1,425 @@
+% Plantilla LaTeX de la Tarea Computacional (IMT2220, 2026-2).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{plantilla}[2026/10/15 Tarea Computacional IMT2220]
+
+\RequirePackage{iftex}
+
+% ------------------------------------------------------------------
+% Datos del curso
+% ------------------------------------------------------------------
+\newcommand*\sigla{IMT2220}
+\newcommand*\curso{Cálculo para Ciencia de Datos}
+\newcommand*\semestre{2026-2}
+\newcommand*\profesor{Eduardo Cerpa}
+\newcommand*\correoprofesor{eduardo.cerpa@uc.cl}
+\newcommand*\ayudante{Kevin Cardemil}
+\newcommand*\correo{kevin.cardemil@uc.cl}
+
+% Título del documento (encabezado de página y antetítulo de las secciones sin número)
+\newcommand*\titulo{Tarea Computacional}
+\newcommand*\settitulo[1]{\renewcommand*\titulo{#1}}
+
+% ------------------------------------------------------------------
+% Idioma y fuentes: las mismas que usa Typst (copiadas en fuentes/)
+% ------------------------------------------------------------------
+\RequirePackage[spanish, es-minimal, es-nolayout, es-noshorthands, es-tabla]{babel}
+\ifLuaTeX
+  \RequirePackage{fontspec}
+  \RequirePackage{unicode-math}
+  % Las fuentes se toman de la carpeta fuentes/; si no está, de las instaladas (TeX Live, y
+  % por lo tanto Overleaf, incluye estas cuatro)
+  \IfFileExists{fuentes/LibertinusSerif-Regular.otf}{\defaultfontfeatures+{Path = fuentes/}}{}
+  \setmainfont{LibertinusSerif}[Extension = .otf,
+    UprightFont = *-Regular, BoldFont = *-Bold,
+    ItalicFont = *-Italic, BoldItalicFont = *-BoldItalic]
+  \setmonofont{DejaVuSansMono}[Extension = .ttf, Scale = 0.8]
+  \setmathfont{NewCMMath-Book}[Extension = .otf]
+  % La versión negrita de la matemática es opcional (no todas las instalaciones la traen)
+  \IfFileExists{fuentes/NewCMMath-Bold.otf}{\def\plt@negrita{1}}{%
+    \IfFileExists{NewCMMath-Bold.otf}{\def\plt@negrita{1}}{\def\plt@negrita{0}}}
+  \if1\plt@negrita
+    \setmathfont{NewCMMath-Bold}[Extension = .otf, version = bold]
+  \fi
+  \setmathrm{NewCMMath-Book}[Extension = .otf]
+  % Texto dentro de las fórmulas: Typst lo escribe con la fuente matemática, en redonda
+  \newfontfamily\plt@fuentemate{NewCMMath-Book}[Extension = .otf]
+  \newcommand\mtext[1]{\text{\normalfont\plt@fuentemate #1}}
+  % Texto con letras espaciadas (en Typst, tracking), en milésimas de em
+  \newcommand\plt@espaciado[2]{{\addfontfeatures{LetterSpace=\fpeval{#1/10}}#2}}
+\else
+  % pdfLaTeX: Libertinus (texto y matemática) y DejaVu Sans Mono
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage{libertinus}
+  \RequirePackage[scaled=0.8]{DejaVuSansMono}
+  \RequirePackage[letterspace=0]{microtype}
+  \RequirePackage{amsmath}
+  \RequirePackage{amssymb}
+  \DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+  \newcommand\symbf[1]{\mathbf{#1}}
+  \newcommand\mtext[1]{\text{\normalfont\rmfamily\upshape #1}}
+  \newcommand\plt@espaciado[2]{\textls[#1]{#2}}
+\fi
+
+% ------------------------------------------------------------------
+% Página
+% ------------------------------------------------------------------
+\RequirePackage[letterpaper, left=2.3cm, right=2.3cm, top=2.6cm, bottom=2.4cm,
+  headheight=14bp, headsep=27.55bp, footskip=26.38bp]{geometry}
+
+\renewcommand\normalsize{\@setfontsize\normalsize{11bp}{14.4bp}\lineskip=7.15bp\relax}
+\normalsize
+% Con pdfLaTeX no hay filtro en Lua: se usa el interlineado habitual de LaTeX (14.4 pt).
+\ifLuaTeX
+  \def\plt@limite{\lineskiplimit=\maxdimen}
+\else
+  \def\plt@limite{\lineskiplimit=0bp \lineskip=1bp}
+\fi
+\plt@limite
+\setlength\topskip{0bp}
+\setlength\parindent{0bp}
+\setlength\parskip{6.05bp}
+\raggedbottom
+\frenchspacing
+\setlength\emergencystretch{1em}
+
+\ifLuaTeX
+\directlua{
+  local GLYPH = node.id("glyph")
+  local HLIST = node.id("hlist")
+  local mayusculas = {}
+  local function mayuscula(f)
+    local c = mayusculas[f]
+    if c == nil then
+      local fuente = font.getfont(f)
+      c = 0
+      local datos = fuente and fuente.shared and fuente.shared.rawdata
+        and fuente.shared.rawdata.metadata
+      if datos and datos.units then
+        local unidades = datos.capheight
+        if not unidades or unidades <= 0 then unidades = datos.ascender end
+        if unidades then c = unidades / datos.units * fuente.size end
+      end
+      if c <= 0 and fuente and fuente.characters and fuente.characters[72] then
+        c = fuente.characters[72].height or 0
+      end
+      mayusculas[f] = c
+    end
+    return c
+  end
+  local function lineas(cabeza)
+    for linea in node.traverse_id(HLIST, cabeza) do
+      if linea.subtype == 1 then
+        local alto, hay = 0, false
+        for n in node.traverse_id(GLYPH, linea.head) do
+          hay = true
+          local c = mayuscula(n.font)
+          if c > alto then alto = c end
+        end
+        if hay then
+          linea.height = alto
+          linea.depth = 0
+        end
+      end
+    end
+    return true
+  end
+  luatexbase.add_to_callback("post_linebreak_filter", lineas, "plantilla.lineas")
+}
+\fi
+
+\linepenalty=1
+\adjdemerits=0
+\pretolerance=-1
+\tolerance=10000
+\hyphenpenalty=145
+\exhyphenpenalty=10
+\finalhyphendemerits=0
+\doublehyphendemerits=57000
+\binoppenalty=0
+\relpenalty=0
+\thinmuskip=3mu
+\medmuskip=4mu
+\thickmuskip=5mu
+\ifLuaTeX
+\directlua{
+  local GLYPH = node.id("glyph")
+  local GLUE = node.id("glue")
+  local KERN = node.id("kern")
+  local DISC = node.id("disc")
+  local PENALTY = node.id("penalty")
+  local MATH = node.id("math")
+  local NOAD = node.id("noad")
+  local HLIST = node.id("hlist")
+  local VLIST = node.id("vlist")
+  local RULE = node.id("rule")
+  local PARFILLSKIP = 15
+  local function esletra(c)
+    return (c >= 65 and c <= 90) or (c >= 97 and c <= 122)
+      or (c >= 0xC0 and c <= 0x24F and c \string~= 0xD7 and c \string~= 0xF7)
+  end
+  local function letras(n, sentido)
+    local c = 0
+    n = n[sentido]
+    while n and c < 5 do
+      if n.id == GLYPH then
+        local u = n.char
+        if u == 0xFB03 or u == 0xFB04 then c = c + 3
+        elseif u >= 0xFB00 and u <= 0xFB06 then c = c + 2
+        elseif esletra(u) or u >= 0xF0000 then c = c + 1
+        else break end
+      elseif n.id \string~= DISC and n.id \string~= KERN then
+        break
+      end
+      n = n[sentido]
+    end
+    return c
+  end
+  local function antes_de_cortar(cabeza)
+    for d in node.traverse_id(DISC, cabeza) do
+      if d.subtype == 3 then
+        local pasos = math.max(0, 5 - letras(d, "prev")) + math.max(0, 5 - letras(d, "next"))
+        d.penalty = math.floor(135 * (1 + 0.15 * pasos) + 10.5)
+      end
+    end
+    local n, en_formula = node.tail(cabeza), false
+    while n do
+      local id = n.id
+      if id == MATH then
+        en_formula = (n.subtype == 1)
+      elseif id == PENALTY then
+        if n.penalty < 10000 then n.penalty = n.penalty + 101 break end
+      elseif id == DISC and not en_formula then
+        n.penalty = n.penalty + 101 break
+      elseif id == GLUE and not en_formula and n.subtype \string~= PARFILLSKIP then
+        local p = n.prev
+        if p and (p.id == GLYPH or p.id == HLIST or p.id == VLIST or p.id == RULE
+            or p.id == DISC or p.id == MATH or (p.id == KERN and p.subtype == 0)) then
+          local q = node.new(PENALTY)
+          q.penalty = 101
+          cabeza = node.insert_before(cabeza, n, q)
+          break
+        end
+      end
+      n = n.prev
+    end
+    return cabeza
+  end
+  luatexbase.add_to_callback("pre_linebreak_filter", antes_de_cortar, "plantilla.cortes")
+  local function sin_cortes_en_parentesis(cabeza, estilo, penalidades)
+    if not penalidades then return cabeza end
+    local nivel, n = 0, cabeza
+    while n do
+      if n.id == NOAD then
+        local s = n.subtype
+        if s == 6 then
+          nivel = nivel + 1
+        elseif s == 7 then
+          if nivel > 0 then nivel = nivel - 1 end
+        elseif (s == 4 or s == 5) and nivel > 0 and n.next and n.next.id \string~= PENALTY then
+          local p = node.new(PENALTY)
+          p.penalty = 10000
+          cabeza, n = node.insert_after(cabeza, n, p)
+        end
+      end
+      n = n.next
+    end
+    return cabeza
+  end
+  luatexbase.add_to_callback("pre_mlist_to_hlist_filter", sin_cortes_en_parentesis,
+    "plantilla.parentesis")
+}
+\fi
+
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{array}
+\RequirePackage{booktabs}
+\RequirePackage{float}
+\RequirePackage{caption}
+\RequirePackage{enumitem}
+\RequirePackage{fancyhdr}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta, calc}
+\RequirePackage[hidelinks]{hyperref}
+
+\definecolor{gris245}{gray}{0.9608}   % luma(245)
+\definecolor{gris90}{gray}{0.3529}    % luma(90)
+
+% Dentro de las tablas, el interlineado normal de LaTeX
+\AtBeginEnvironment{tabular}{\lineskiplimit=0pt \lineskip=1pt}
+% También en las ecuaciones de varias líneas de amsmath (con LuaLaTeX, el interlineado de la
+% plantilla deja en la página un espacio que se puede encoger sin límite)
+\@for\plt@entorno:=align,align*,alignat,alignat*,flalign,flalign*,gather,gather*,multline,multline*\do{%
+  \expandafter\AtBeginEnvironment\expandafter{\plt@entorno}{\lineskiplimit=0pt \lineskip=1pt}}
+
+% ------------------------------------------------------------------
+% Encabezado y pie de página
+% ------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand\headrulewidth{0bp}
+\fancyhead[L]{\fontsize{9bp}{11bp}\selectfont
+  \rlap{\smash{\rule[-5.64bp]{\textwidth}{0.4bp}}}%
+  (\sigla) \curso\hfill\titulo\rightmark}
+\fancyfoot[C]{\fontsize{9bp}{11bp}\selectfont\thepage}
+\markright{}
+
+% ------------------------------------------------------------------
+% Encabezados
+% ------------------------------------------------------------------
+\newcounter{problema}
+\newcommand\plt@antetitulo[1]{%
+  {\fontsize{9.5bp}{11bp}\selectfont\bfseries\plt@espaciado{160}{\MakeUppercase{#1}}}}
+\newcommand\plt@bloquetitulo[2]{%
+  \par\nointerlineskip
+  \vspace*{\dimexpr 6.09bp-\parskip\relax}\nointerlineskip
+  \noindent\smash{\plt@antetitulo{#1}}\par\nointerlineskip
+  \vspace{\dimexpr 33.71bp-\parskip\relax}\nointerlineskip
+  \noindent\smash{\fontsize{17bp}{20bp}\selectfont\bfseries #2}\par\nointerlineskip
+  \vspace{\dimexpr 13.93bp-\parskip\relax}\nointerlineskip
+  \noindent\rule{\textwidth}{0.9bp}\par\nobreak
+  \vspace{7.94bp}}
+\newcommand\problema[1]{%
+  \clearpage
+  \refstepcounter{problema}%
+  \markright{ · Problema \theproblema}%
+  \plt@bloquetitulo{Problema \theproblema}{#1}}
+\newcommand\seccionsinnumero[1]{%
+  \clearpage
+  \plt@bloquetitulo{\titulo}{#1}}
+
+% Encabezado de nivel 2: negrita de 12 pt
+\newcommand\seccion[1]{%
+  \par\vskip\dimexpr 28.9bp-\parskip\relax\nointerlineskip
+  \noindent\smash{\fontsize{12bp}{14.4bp}\selectfont\bfseries #1}\par
+  \nobreak\vspace{-1.36bp}}
+
+% ------------------------------------------------------------------
+% Ecuaciones destacadas \[ ... \]
+% ------------------------------------------------------------------
+\def\[#1\]{%
+  \ifvmode\else\par\fi
+  \noindent\hbox to\linewidth{\hfil$\displaystyle #1$\hfil}\par
+  \ignorespaces}
+
+% ------------------------------------------------------------------
+% Listas
+% ------------------------------------------------------------------
+% (a), (b), ... para las partes; i., ii., ... para las subpartes. Las etiquetas se alinean
+% a la derecha en una columna del ancho de la más ancha (opción widest de cada lista).
+% Entre los elementos de una enumeración quedan 1.1em; en una lista con viñetas, solo el
+% interlineado. Una lista que sigue al texto sin línea en blanco no lleva espacio antes.
+\setlist{labelsep=5.5bp, parsep=6.05bp}
+\setlist[enumerate]{align=right, leftmargin=*, itemsep=-1.1bp, topsep=-1.1bp, partopsep=1.1bp}
+\setlist[enumerate,1]{label=(\alph*), widest=b}
+\setlist[enumerate,2]{label=\roman*., widest=iii}
+\setlist[enumerate,3]{label=[\Roman*], widest=III}
+\setlist[itemize]{label=\textbullet, align=left, leftmargin=*, itemsep=-6.05bp, topsep=-6.05bp,
+  partopsep=6.05bp}
+% En LaTeX, una lista que empieza sin línea en blanco también pierde el espacio de después;
+% \despueslista lo repone cuando en la versión Typst hay una línea en blanco tras la lista.
+\newcommand\despueslista{\vspace{6.05bp}}
+
+% ------------------------------------------------------------------
+% Figuras, tablas y código
+% ------------------------------------------------------------------
+\DeclareCaptionFont{diez}{\fontsize{10bp}{12.5bp}\selectfont\lineskip=6.5bp\plt@limite\relax}
+\captionsetup{font=diez, labelsep=colon, justification=centerlast, skip=10.95bp}
+\captionsetup[table]{position=bottom}
+\setlength\intextsep{6.05bp}
+\setlength\aboverulesep{0bp}
+\setlength\belowrulesep{0bp}
+% Tablas: sin bordes verticales, con 10 pt de margen horizontal y 4 pt vertical en cada celda.
+% Uso: \begin{tabular}{>{\filatabla}l c c} \toprule[0.8bp] ... \midrule[0.4bp] ... \bottomrule[0.8bp]
+\setlength\tabcolsep{10bp}
+\newcommand\filatabla{\rule[-4bp]{0bp}{11.5bp}}
+
+\newcommand\code[1]{\texttt{#1}}
+
+% ------------------------------------------------------------------
+% Notación matemática
+% ------------------------------------------------------------------
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\newcommand\ip[2]{\langle #1, #2\rangle}
+\newcommand\R{\mathbb{R}}
+\DeclareMathOperator\diag{diag}
+\DeclareMathOperator\Var{Var}
+\newcommand\negrita[1]{{\bfseries\boldmath #1}}
+
+% ------------------------------------------------------------------
+% Portada (posiciones medidas en la versión Typst)
+% ------------------------------------------------------------------
+% \portada[subtitulo]: el subtítulo es opcional; el enunciado no lo usa y la pauta pone "Pauta".
+% Si antes de cargar el documento se define \grupoenunciado (por ejemplo, compilando con
+%   pdflatex "\def\grupoenunciado{3}\input{enunciado.tex}"),
+% el subtítulo es "Grupo 3": así se obtiene el enunciado de un grupo sin modificar el .tex.
+\newcommand\plt@texto[4]{% x, y de la línea base (desde la esquina superior izquierda), ancla, texto
+  \node[anchor=#3, inner sep=0bp, outer sep=0bp] at
+    ($(current page.north west)+(#1,{-(#2)})$) {#4};}
+% \integrantes{Nombre 1 \\ Nombre 2 \\ ...}: si se usa, la portada muestra la lista de integrantes.
+\newcommand*\plt@integrantes{}
+\newcommand\integrantes[1]{\renewcommand*\plt@integrantes{#1}}
+\newcommand\portada[1][]{%
+  \def\plt@subtitulo{#1}%
+  \ifx\plt@subtitulo\@empty
+    \ifdefined\grupoenunciado \edef\plt@subtitulo{Grupo \grupoenunciado}\fi
+  \fi
+  \thispagestyle{empty}%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Institución
+    \plt@texto{70.866bp}{74.61bp}{base west}{\fontsize{10bp}{12bp}\selectfont Pontificia Universidad Católica de Chile}
+    \plt@texto{70.866bp}{87.69bp}{base west}{\fontsize{10bp}{12bp}\selectfont Instituto de Ingeniería Matemática y Computacional}
+    \plt@texto{541.134bp}{87.69bp}{base east}{\fontsize{10bp}{12bp}\selectfont \semestre}
+    \fill ($(current page.north west)+(70.866bp,-95.9bp)$) rectangle ++(470.268bp,-1.2bp);
+    % Título
+    \ifx\plt@subtitulo\@empty
+      \def\plt@dy{0bp}%
+    \else
+      \def\plt@dy{40.72bp}%
+    \fi
+    \plt@texto{70.866bp}{288.46bp-\plt@dy}{base west}{\fontsize{11bp}{13bp}\selectfont\bfseries\plt@espaciado{220}{\sigla}}
+    \plt@texto{70.866bp}{327.47bp-\plt@dy}{base west}{\fontsize{21bp}{25bp}\selectfont \curso}
+    \plt@texto{70.866bp}{395.66bp-\plt@dy}{base west}{\fontsize{60bp}{72bp}\selectfont\bfseries Tarea}
+    \plt@texto{70.866bp}{463.83bp-\plt@dy}{base west}{\fontsize{60bp}{72bp}\selectfont\bfseries Computacional}
+    \ifx\plt@subtitulo\@empty\else
+      \plt@texto{70.866bp}{511.34bp}{base west}{\fontsize{28bp}{34bp}\selectfont \plt@subtitulo}
+    \fi
+    % Integrantes (solo si se definieron con \integrantes)
+    \ifx\plt@integrantes\@empty\else
+      \plt@texto{70.866bp}{565bp}{base west}{\fontsize{9bp}{11bp}\selectfont\plt@espaciado{120}{INTEGRANTES}}
+      \node[anchor=north west, inner sep=0bp, text width=470bp, align=left]
+        at ($(current page.north west)+(70.866bp,-575bp)$)
+        {\fontsize{13bp}{18bp}\selectfont \plt@integrantes};
+    \fi
+    % Equipo docente
+    \fill ($(current page.north west)+(70.866bp,-672.75bp)$) rectangle ++(470.268bp,-0.5bp);
+    \plt@texto{70.866bp}{695.34bp}{base west}{\fontsize{9bp}{11bp}\selectfont\plt@espaciado{120}{Profesor}}
+    \plt@texto{541.134bp}{695.34bp}{base east}{\fontsize{9bp}{11bp}\selectfont\plt@espaciado{120}{Ayudante}}
+    \plt@texto{70.866bp}{711.05bp}{base west}{\fontsize{13bp}{16bp}\selectfont \profesor}
+    \plt@texto{541.134bp}{711.05bp}{base east}{\fontsize{13bp}{16bp}\selectfont \ayudante}
+    \plt@texto{70.866bp}{723.95bp}{base west}{\fontsize{9.5bp}{11bp}\selectfont\ttfamily \correoprofesor}
+    \plt@texto{541.134bp}{723.95bp}{base east}{\fontsize{9.5bp}{11bp}\selectfont\ttfamily \correo}
+  \end{tikzpicture}%
+  \null\clearpage
+  \setcounter{page}{1}}
+
+% ------------------------------------------------------------------
+% Caja para notas, indicaciones y observaciones
+% ------------------------------------------------------------------
+
+\newtcolorbox{nota}[1][Nota]{%
+  enhanced, breakable=false, sharp corners, boxsep=0bp, boxrule=0bp,
+  colback=gris245, colframe=black, frame hidden,
+  borderline west={1bp}{0bp}{black},
+  left=10bp, right=8bp, top=8bp, bottom=8bp,
+  before={\par\noindent}, after={\par},
+  fontupper=\normalsize, parbox=false,
+  before upper={\textbf{#1.}\ }}
+
+
+\endinput
