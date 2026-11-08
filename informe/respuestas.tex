@@ -245,13 +245,39 @@ Algunas recomendaciones
 \begin{enumerate}[label=\roman*., widest=ii]
   \item \textbf{Implementación.} Reporten $\norm{x_0}_2$, $\max_i \abs{x_{0,i}}$ y $\norm{Ax_0 - b}_2$, muestren lado a lado $b$ y $x_0$, y respondan las preguntas.
 
-  \pendiente
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=6cm]{reconstruccion_b.png}
+  \caption{Comparación imagen Observada b y Reconstrucción \(x_0\)}
+  \label{fig:comparación}
+\end{figure}
+
+  \subsection*{• Respuestas}
+
+  Resultados Numéricos:
+
+  - Norma: \(\|x_0\|_2=3.503\cdot10^5\)
+
+  - Máximo Absoluto: \(\max_i|x_{0,i}|=1.871\cdot10^4\)
+
+  - Residuo: \(\|Ax_0-b\|_2=5.626\cdot10^{-12}\)
+
+  \smallskip
+
+  Al comparar las imágenes, se observa claramente que la imagen \(x_0\) no se parece a la imagen observada \(b\). Si bien esta última se encuentra desenfocada, todavía es posible distinguir las características y el rostro de lo que parece ser un mapache. En cambio, en \(x_0\) se pueden observar píxeles blancos y negros que impiden identificar alguna figura reconocible.
+
+  Esta distorsión se puede entender a partir de los resultados numéricos obtenidos. En primer lugar, la norma de la reconstrucción es \(\|x_0\|_2=3.503\cdot10^5\). Sabiendo que la norma máxima de una imagen válida es de \(64\), podemos notar cómo la norma obtenida es considerablemente mayor a la esperada, lo que provoca que su magnitud sea desproporcionada y dificulte la interpretación de los píxeles obtenidos.
+
+  Por otro lado, se obtuvo que el máximo absoluto de sus componentes es \(\max_i|x_{0,i}|=1.871\cdot10^4\). Esta cifra es significantivamente superior, considerando la intensidad de cada píxel debería pertener al intervalo \([0,1]\). Al no respetarse estos límites, los píxeles se saturan creando contrastes extremos de blanco y negro que arruinan la imagen reconstruida.
+
+  Finalmente, el residuo obtenido es \(\|Ax_0-b\|_2=5.626\cdot10^{-12}\), un valor que es prácticamente cero. Gracias a este resultado sabemos que \(x_0\) satisface el sistema \(Ax=b\). Sin embargo, esto no garantiza que la solución obtenida tenga sentido como imagen.
+
+  En conclusión, aunque \(x_0\) satisface el sistema, sus valores no cumplen las condiciones esperadas para una imagen válida, lo que concuerda con la distorsión que se observa en la reconstrucción.
 
   \item \textbf{Explicación.}
 
   \pendiente
 \end{enumerate}
-\despueslista
 
 \seccion{(c) Regularización de Tikhonov}
 

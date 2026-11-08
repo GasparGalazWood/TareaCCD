@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794156759.7671 "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" "respuestas.pdf" "respuestas" 1794156764.1423 0
+["pdflatex"] 1794158869.21062 "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" "respuestas.pdf" "respuestas" 1794158872.08018 0
   "C:/Users/alond/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1794153695 215428 548f42868854776baa1d44e36d05f106 ""
   "C:/Users/alond/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1773771601 13333849 5ea4058a98cd1d18c2a9e34939cd5c44 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/dejavu/dejavumono_t1-type1.enc" 1379890442 2620 1ef8c8026e6f0fc7a8bfd158c7dfbe38 ""
@@ -243,12 +243,13 @@
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/alond/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" 1794156759 14520 5498403bfd740925a061fbc9790e54cb ""
+  "c:/Users/alond/OneDrive/Escritorio/Tarea CCD escritorio/TareaCCD/informe/respuestas.tex" 1794158868 16589 d21142057a781d1863d3a16340cb0987 ""
   "figuras/ejemplo_b.png" 1794152465 19137 b7d9da2e8afe63867c777b930744e0cb ""
+  "figuras/reconstruccion_b.png" 1794151173 29746 5bd618aafa5258d8ec50e40aeeb252d4 ""
   "plantilla.sty" 1794152465 17912 54c96207a512adf1664dc503fbd6044d ""
-  "respuestas.aux" 1794156763 1225 2ed8c99a72f838560d1a1ab494497554 "pdflatex"
-  "respuestas.out" 1794156762 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "respuestas.tex" 1794156759 14520 5498403bfd740925a061fbc9790e54cb ""
+  "respuestas.aux" 1794158871 1522 148761676cbb782893c22bf92508f7c9 "pdflatex"
+  "respuestas.out" 1794158870 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "respuestas.tex" 1794158868 16589 d21142057a781d1863d3a16340cb0987 ""
   (generated)
   "respuestas.aux"
   "respuestas.log"
