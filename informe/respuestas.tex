@@ -17,11 +17,12 @@
 % ---------------------------------------------------------------------
 % Datos del grupo
 % ---------------------------------------------------------------------
-\newcommand\grupo{N}   % <-- número del grupo
+\newcommand\grupo{2}   % <-- número del grupo
 \integrantes{%
-  Nombre Apellido 1 \\
-  Nombre Apellido 2 \\
-  Nombre Apellido 3}
+  Alondra Estay \\
+  Gaspar Galaz \\
+  José Mora \\
+  Renato Reyes}
 
 % Marca para lo que falta por completar (búsquenla con Ctrl+F antes de entregar)
 \newcommand\pendiente{{\color{gris90}\itshape [Escriban aquí su desarrollo y su respuesta.]}}
@@ -35,7 +36,7 @@
 % =====================================================================
 
 \begin{nota}[Indicaciones]
-  Esta plantilla es recomendada para resolver la tarea (aunque pueden utilizar cualquier otro formato mientras cumplan con lo solicitado). 
+  Esta plantilla es recomendada para resolver la tarea (aunque pueden utilizar cualquier otro formato mientras cumplan con lo solicitado).
   Pueden reemplazar cada \pendiente{} por su desarrollo.
   Al final de este archivo hay ejemplos de cómo escribir ecuaciones, incluir figuras y tablas. Borren esa página antes de entregar.
 \end{nota}
@@ -57,17 +58,187 @@ Algunas recomendaciones
 \begin{enumerate}[label=\roman*., widest=iii]
   \item \textbf{Gradiente y matriz Hessiana de $J_0$.}
 
-  \pendiente
+  Consideraremos la función:
+  \[
+  J_0(x)=\|Ax-b\|_2^2
+  \]
+
+  \subsubsection*{• Cálculo del gradiente}
+
+  Para calcular el gradiente, primero expandiremos la función utilizando la propiedad de la norma euclidiana al cuadrado, \(\|x\|_2^2=x^Tx\):
+
+  \[
+  \begin{aligned}
+  J_0(x) &= (Ax-b)^T(Ax-b)\\
+  &=x^TA^TAx-x^TA^Tb-b^TAx+b^Tb
+  \end{aligned}
+  \]
+
+  Como \(x^TA^Tb\) es un escalar, es igual a su transpuesta, es decir, \(x^TA^Tb=(x^TA^Tb)^T=b^TAx\).
+
+  Al tener esto en consideración, podemos agrupar los términos del medio y obtener:
+
+  \[
+  J_0(x)=x^TA^TAx-2x^TA^Tb+b^Tb
+  \]
+
+  Con la función expresada de esta forma, podemos calcular su gradiente derivando cada término respecto del vector \(x\). Realizando la derivación, obtenemos que el gradiente de \(J_0\) es:
+
+  \[
+  \boxed{\nabla J_0(x)=2A^T(Ax-b)}
+  \]
+
+  \subsubsection*{• Cálculo de la Matriz Hessiana}
+
+  Para calcular la matriz Hessiana, debemos encontrar las segundas derivadas parciales de una función. En este caso, como \(J_0(x)\) depende del vector \(x\), podemos obtener la Hessiana derivando el gradiente respecto de \(x\), considerando que las matrices \(A\) y \(A^T\) y el vector \(b\) son constantes.
+
+  Por lo tanto, la matriz Hessiana es:
+
+  \[
+  \boxed{H_{J_0}=2A^TA}
+  \]
+
+  \bigskip
+  \bigskip
+  \bigskip
+  \bigskip
+
+  \subsubsection*{• Deducción de las ecuaciones normales}
+
+  Para demostrar que los puntos críticos de \(J_0(x)\) corresponden a las soluciones de las ecuaciones normales, debemos recordar que un punto crítico de una función es aquel donde su gradiente es igual a cero. Por lo que utilizaremos el gradiente obtenido anteriormente y lo igualaremos a cero:
+
+  \[
+  \nabla J_0(x)=2A^T(Ax-b)=0
+  \]
+
+  Simplificamos dividiendo por \(2\) y reordenamos los términos:
+
+  \[
+  \begin{aligned}
+  A^T(Ax-b)&=0\\
+  A^TAx-A^Tb&=0\\
+  A^TAx&=A^Tb
+  \end{aligned}
+  \]
+
+  De esta manera, obtenemos la expresión para las ecuaciones normales:
+
+  \[
+  \boxed{A^TAx=A^Tb}
+  \]
+
+  Por lo tanto, concluimos que si un vector \(x\) es un punto crítico de \(J_0(x)\), entonces necesariamente satisface las ecuaciones normales.
+
+  \bigskip
 
   \item \textbf{$H_{J_0}$ es semidefinida positiva y todo punto crítico es un mínimo global.}
 
-  \pendiente
+  \subsubsection*{• Demostración de la Hessiana semidefinida positiva}
+
+  Para demostrar que una matriz \(H\) es semidefinida positiva, se debe cumplir que \(v^THv\geq 0\) para cualquier vector \(v\in\mathbb{R}^n\).
+
+  Del ítem (a).i, obtuvimos que la matriz Hessiana es: \(H_{J_0}=2A^TA\)
+
+  Dado que \(H_{J_0}\) es simétrica, ya que \((2A^TA)^T=2A^TA\), evaluamos la condición anterior tomando un vector cualquiera \(v\in\mathbb{R}^n\) y reemplazamos los valores:
+
+  \[
+  \begin{aligned}
+  v^TH_{J_0}v
+  &=v^T(2A^TA)v\\
+  &=2v^TA^TAv\\
+  &=2(Av)^T(Av)\\
+  &=2\|Av\|_2^2
+  \end{aligned}
+  \]
+
+  Sabemos que una norma al cuadrado siempre es mayor o igual a cero. Por lo tanto:
+
+  \[
+  \boxed{v^TH_{J_0}v=2\|Av\|_2^2\geq 0}
+  \]
+
+  Como esta desigualdad se cumple para cualquier vector \(v\), concluimos que la matriz Hessiana \(H_{J_0}\) es semidefinida positiva.
+
+  \vspace{0.5cm} % Espacio en blanco opcional
+
+  \subsubsection*{• Demostración de que todo punto crítico es un mínimo global}
+
+  Para demostrar que cualquier punto crítico de \(J_0(x)\) es un mínimo global, utilizaremos la aproximación de Taylor de segundo orden. Al ser \(J_0(x)\) una función cuadrática, esta aproximación es exacta y podemos expresarla como:
+
+  \[
+  J_0(x)=J_0(x_0)+\nabla J_0(x_0)^T(x-x_0)+\frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)
+  \]
+
+  Considerando \(x_0\) un punto crítico, sabemos que su gradiente es igual a cero, es decir, \(\nabla J_0(x_0)=0\). Teniendo esto en cuenta, podemos simplificar la expresión obteniendo:
+
+  \[
+  J_0(x)=J_0(x_0)+\frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)
+  \]
+
+  Además, como demostramos anteriormente que la matriz Hessiana es semidefinida positiva, el término cuadrático es siempre mayor o igual a cero:
+
+  \[
+  \frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)\geq 0
+  \]
+
+  De esta manera, obtenemos:
+
+  \[
+  \boxed{J_0(x)\geq J_0(x_0)}
+  \]
+
+  Con esto podemos deducir que el valor de la función en cualquier punto \(x\) es mayor o igual que su valor en el punto crítico \(x_0\). Por lo tanto, concluimos que todo punto crítico de \(J_0(x)\) es un mínimo global de la función.
+
+  \bigskip
 
   \item \textbf{Unicidad o infinitos minimizadores.}
 
-  \pendiente
+  \subsubsection*{• Todos los valores propios de \(A^TA\) son positivos}
+
+  Si todos los valores propios de \(A^TA\) son positivos, entonces esta matriz es definida positiva y, por lo tanto, invertible.
+
+  Del ítem (a).i, sabemos que todos los puntos críticos de \(J_0(x)\) satisfacen las ecuaciones normales:
+
+  \[
+  A^TAx=A^Tb
+  \]
+
+  Como \(A^TA\) es invertible, multiplicamos ambos lados por su inversa para despejar \(x\):
+
+  \[
+  \boxed{x=(A^TA)^{-1}A^Tb}
+  \]
+
+  Por lo tanto, las ecuaciones normales tienen una única solución, la cual corresponde a un mínimo global de \(J_0(x)\), según lo demostrado en el ítem (a).ii. Con esto podemos concluir que, cuando todos los valores propios de \(A^TA\) son positivos, la función \(J_0(x)\) tiene un único minimizador global.
+
+  \bigskip
+
+  \subsubsection*{• \(A^TA\) tiene al menos un valor propio nulo}
+
+  Si \(A^TA\) tiene un valor propio igual a cero, entonces existe un vector \(v\neq 0\) tal que \(A^TAv=0\).
+
+  Multiplicando por \(v^T\) y utilizando la propiedad de la norma euclidiana, obtenemos:
+
+  \[
+  v^TA^TAv=\|Av\|_2^2=0
+  \]
+
+  Como una norma solo es cero cuando el vector es nulo, concluimos que \(Av=0\).
+
+  Para demostrar que existen infinitos minimizadores, consideramos un punto crítico \(x_0\) de \(J_0(x)\), que por lo demostrado en el ítem (a).ii también es un mínimo global. A partir de este punto, podemos construir nuevos vectores de la forma \(x_t=x_0+tv\), con \(t\in\mathbb{R}\). Para comprobar si estos también son minimizadores, los reemplazamos en la función:
+
+  \[
+  \begin{aligned}
+  J_0(x_t)
+  &=\|A(x_0+tv)-b\|_2^2\\
+  &=\|Ax_0+tAv-b\|_2^2\\
+  &=\|Ax_0-b\|_2^2\\
+  &=J_0(x_0)
+  \end{aligned}
+  \]
+
+  Como \(Av=0\), todos los vectores \(x_t\) entregan el mismo valor de la función que \(x_0\), por lo que también son mínimos globales. Además, como \(v\neq 0\) y \(t\) puede tomar infinitos valores, podemos generar infinitos vectores distintos. Por lo tanto, concluimos que, si \(A^TA\) tiene al menos un valor propio nulo, la función \(J_0(x)\) tiene infinitos minimizadores globales.
 \end{enumerate}
-\despueslista
 
 \seccion{(b) Reconstrucción}
 
