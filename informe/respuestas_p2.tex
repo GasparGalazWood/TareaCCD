@@ -921,11 +921,43 @@ s
 
 \seccion{(d) Descenso del gradiente}
 
-\pendiente
+  Creamos una función para calcular el decenso del gradiente, con $\alpha_2 = 1$ de la forma $\theta_k+1 = \theta_k −\alpha_2 \nabla J(\theta_k)$
+  y otra similar para obtener el error de cada una de las k iteraciones, con esto podemos ver que la evolución del error en el siguiente gráfico
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=6cm]{evo_des_gradiente.png}
+  \caption{Gráfico de la evolución del descenso del gradiente.}
+  \label{fig:evo_gradiente}
+  \end{figure}
+
+  Dado que este gráfico no nos permite ver con claridar el cambio, modificamos los parametros para observarlo de mejor manera
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=6cm]{evo_des_gradiente_cambio.png}
+  \caption{Gráfico de la evolución del descenso del gradiente (centrado en el cambio).}
+  \label{fig:evo_gradiente_cambio}
+  \end{figure}
+
+  Como podemos ver, la forma del gráfico es una curva en descenso que acelera la reducción de su error entre los k 100 y 150, la forma es vagamente similar a una s invertida.
+
 
 \seccion{(e) Parámetros encontrados}
 
-\pendiente
+  El valor encontrado para $\theta_0$ es [4.82070175710775, 0.680190806366675, -4.054068759861999, 0.6141261364555466, 3.5773664096641298, -0.10006448173910788]
+  Y el error $J(\theta_20000)$ es 0.0013927707069917585
+
+  El siguiente gráfico no permite comparar los valores de entrenamiento con los obtenidos mediante $\hat{y}(x;\theta_20000)$
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=6cm]{entrenamientoXcurva.png}
+  \caption{Gráfico comparativo.}
+  \label{fig:entrexcurva}
+  \end{figure}
+
+  Por lo que podemos observar se aproxima adecuadamente.
 
 \seccion{(f) Sensibilidad del entrenamiento}
 
