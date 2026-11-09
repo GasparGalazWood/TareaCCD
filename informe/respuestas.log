@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.3.17)  8 NOV 2026 16:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.3.17)  8 NOV 2026 21:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1007,50 +1007,63 @@ LaTeX Info: Redefining \% on input line 220.
 <figuras/reconstruccion_b.png, id=86, 426.393pt x 230.5413pt>
 File: figuras/reconstruccion_b.png Graphic file (type png)
 <use figuras/reconstruccion_b.png>
-Package pdftex.def Info: figuras/reconstruccion_b.png  used on input line 250.
+Package pdftex.def Info: figuras/reconstruccion_b.png  used on input line 251.
 (pdftex.def)             Requested size: 170.71652pt x 92.30283pt.
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 251.
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 252.
 LaTeX Font Info:    Font shape `T1/LibertinusSerif-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 255.
+(Font)              scaled to size 12.0pt on input line 256.
 LaTeX Font Info:    Font shape `T1/LibertinusSerif-TLF/b/n' will be
-(Font)              scaled to size 12.0pt on input line 255.
+(Font)              scaled to size 12.0pt on input line 256.
 LaTeX Font Info:    Font shape `TS1/LibertinusSerif-TLF/b/n' will be
-(Font)              scaled to size 12.0pt on input line 255.
-LaTeX Info: Redefining \. on input line 268.
-LaTeX Info: Redefining \% on input line 268.
+(Font)              scaled to size 12.0pt on input line 256.
+LaTeX Info: Redefining \. on input line 269.
+LaTeX Info: Redefining \% on input line 269.
  [5 <./figuras/reconstruccion_b.png>]
-LaTeX Info: Redefining \. on input line 322.
-LaTeX Info: Redefining \% on input line 322.
+LaTeX Info: Redefining \. on input line 325.
+LaTeX Info: Redefining \% on input line 325.
  [6]
-LaTeX Info: Redefining \. on input line 366.
-LaTeX Info: Redefining \% on input line 366.
+LaTeX Info: Redefining \. on input line 369.
+LaTeX Info: Redefining \% on input line 369.
  [7]
-LaTeX Info: Redefining \. on input line 444.
-LaTeX Info: Redefining \% on input line 444.
+LaTeX Info: Redefining \. on input line 447.
+LaTeX Info: Redefining \% on input line 447.
  [8]
-LaTeX Info: Redefining \. on input line 516.
-LaTeX Info: Redefining \% on input line 516.
+LaTeX Info: Redefining \. on input line 519.
+LaTeX Info: Redefining \% on input line 519.
  [9]
-LaTeX Info: Redefining \. on input line 587.
-LaTeX Info: Redefining \% on input line 587.
- [10]
-LaTeX Info: Redefining \. on input line 598.
-LaTeX Info: Redefining \% on input line 598.
- [11]
-LaTeX Info: Redefining \. on input line 661.
-LaTeX Info: Redefining \% on input line 661.
- [12
+<figuras/reconstrucciones_tikhonov.png, id=126, 1076.823pt x 233.4321pt>
+File: figuras/reconstrucciones_tikhonov.png Graphic file (type png)
+<use figuras/reconstrucciones_tikhonov.png>
+Package pdftex.def Info: figuras/reconstrucciones_tikhonov.png  used on input line 577.
+(pdftex.def)             Requested size: 426.79134pt x 92.51633pt.
+LaTeX Info: Redefining \. on input line 585.
+LaTeX Info: Redefining \% on input line 585.
+ [10 <./figuras/reconstrucciones_tikhonov.png>]
+<figuras/reconstruccion_danada.png, id=136, 426.393pt x 230.17995pt>
+File: figuras/reconstruccion_danada.png Graphic file (type png)
+<use figuras/reconstruccion_danada.png>
+Package pdftex.def Info: figuras/reconstruccion_danada.png  used on input line 592.
+(pdftex.def)             Requested size: 227.62204pt x 122.87636pt.
+LaTeX Info: Redefining \. on input line 631.
+LaTeX Info: Redefining \% on input line 631.
+ [11 <./figuras/reconstruccion_danada.png>]
+LaTeX Info: Redefining \. on input line 662.
+LaTeX Info: Redefining \% on input line 662.
+ [12]
+LaTeX Info: Redefining \. on input line 725.
+LaTeX Info: Redefining \% on input line 725.
+ [13
 
 ]
-LaTeX Info: Redefining \. on input line 667.
-LaTeX Info: Redefining \% on input line 667.
- [13]
-<figuras/ejemplo_b.png, id=155, 209.583pt x 226.9278pt>
+LaTeX Info: Redefining \. on input line 731.
+LaTeX Info: Redefining \% on input line 731.
+ [14]
+<figuras/ejemplo_b.png, id=170, 209.583pt x 226.9278pt>
 File: figuras/ejemplo_b.png Graphic file (type png)
 <use figuras/ejemplo_b.png>
-Package pdftex.def Info: figuras/ejemplo_b.png  used on input line 687.
+Package pdftex.def Info: figuras/ejemplo_b.png  used on input line 751.
 (pdftex.def)             Requested size: 170.71652pt x 184.84583pt.
- [14
+ [15
 
 
  <./figuras/ejemplo_b.png>] (respuestas.aux
@@ -1070,17 +1083,17 @@ Package rerunfilecheck Info: File `respuestas.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 35188 strings out of 467867
- 715244 string characters out of 5418334
- 1156960 words of memory out of 5000000
- 63194 multiletter control sequences out of 15000+600000
- 770396 words of font info for 263 fonts, out of 8000000 for 9000
+ 35228 strings out of 467867
+ 716514 string characters out of 5418334
+ 1157166 words of memory out of 5000000
+ 63214 multiletter control sequences out of 15000+600000
+ 771476 words of font info for 271 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  113i,15n,131p,1082b,883s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/dejavu/DejaVuSansMono.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertinus-type1/LibertinusSerif-Bold.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertinus-type1/LibertinusSerif-Italic.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertinus-type1/LibertinusSerif-Regular.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/alond/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on respuestas.pdf (15 pages, 528124 bytes).
+Output written on respuestas.pdf (16 pages, 656467 bytes).
 PDF statistics:
- 248 PDF objects out of 1000 (max. 8388607)
- 51 named destinations out of 1000 (max. 500000)
- 92327 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 264 PDF objects out of 1000 (max. 8388607)
+ 59 named destinations out of 1000 (max. 500000)
+ 92337 words of extra memory for PDF output out of 106986 (max. 10000000)
 

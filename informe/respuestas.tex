@@ -239,18 +239,19 @@ Algunas recomendaciones
 
   Como \(Av=0\), todos los vectores \(x_t\) entregan el mismo valor de la función que \(x_0\), por lo que también son mínimos globales. Además, como \(v\neq 0\) y \(t\) puede tomar infinitos valores, podemos generar infinitos vectores distintos. Por lo tanto, concluimos que, si \(A^TA\) tiene al menos un valor propio nulo, la función \(J_0(x)\) tiene infinitos minimizadores globales.
 \end{enumerate}
+\despueslista
 
 \seccion{(b) Reconstrucción}
 
 \begin{enumerate}[label=\roman*., widest=ii]
   \item \textbf{Implementación.} Reporten $\norm{x_0}_2$, $\max_i \abs{x_{0,i}}$ y $\norm{Ax_0 - b}_2$, muestren lado a lado $b$ y $x_0$, y respondan las preguntas.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{reconstruccion_b.png}
-  \caption{Comparación imagen Observada b y Reconstrucción \(x_0\)}
-  \label{fig:comparación}
-\end{figure}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{reconstruccion_b.png}
+    \caption{Comparación imagen Observada b y Reconstrucción \(x_0\)}
+    \label{fig:comparación_1}
+  \end{figure}
 
   \subsection*{• Respuestas}
 
@@ -276,8 +277,10 @@ Algunas recomendaciones
 
   \item \textbf{Explicación.}
 
-  \pendiente
+  *********
+
 \end{enumerate}
+\despueslista
 
 \seccion{(c) Regularización de Tikhonov}
 
@@ -485,7 +488,7 @@ Algunas recomendaciones
 
   \subsubsection*{• Cota aporte de ruido}
 
-  Para realizar la segunda demostración, partiremos del término asociado ruido obtenido en la primera igualdad:
+  Para realizar la segunda demostración, partiremos del término asociado al ruido obtenido en la primera igualdad:
 
   \[
   \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
@@ -549,7 +552,7 @@ Algunas recomendaciones
 
   \item \textbf{Interpretación.}
 
-  \pendiente
+  *********
 
   \item \textbf{Implementación.} Completen la tabla y comparen las reconstrucciones.
 
@@ -559,40 +562,101 @@ Algunas recomendaciones
       \toprule[0.8bp]
                            & $\norm{x}_2$ & $\norm{Ax - b}_2$ \\
       \midrule[0.4bp]
-      $x_0$                &              &                   \\
-      $\lambda = 10^{-3.5}$ &             &                   \\
-      $\lambda = 10^{-2.5}$ &             &                   \\
-      $\lambda = 1$        &              &                   \\
+      $x_0$                 &3.503e+05        &5.626e-12                  \\
+      $\lambda = 10^{-3.5}$ &37.06            &0.5617                  \\
+      $\lambda = 10^{-2.5}$ &36.02            &0.6169                   \\
+      $\lambda = 1$         &17.18            &17.85                  \\
       \bottomrule[0.8bp]
     \end{tabular}
     \caption{Norma y residuo de cada reconstrucción.}
     \label{tab:ridge}
   \end{table}
 
-  \pendiente
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{reconstrucciones_tikhonov.png}
+    \caption{Comparación de reconstrucciones con distintos valores de \(\lambda\).}
+    \label{fig:comparación_2}
+  \end{figure}
+
+  \subsubsection*{• Análisis de Imagenes y Conclusión}
+
+  Analizando los resultados numéricos y las imagenes obtenidas, se concluye que \(\lambda = 10^{-2.5}\) entrega la mejor reconstrucción. Esto se debe a que permite distinguir con mayor claridad el rostro del mapache, presenta menos distorciones y tiene una norma de \(36.02\), inferior al máximo de \(64\). Además, su residuo de \(0.6169\) es el más cercano al nivel de ruido original \(\delta=0.64\), por lo que logra un mejor equilibrio entre reducir el ruido y conservar los detalles de la imagen en comparación con las otras reconstrucciones.
 \end{enumerate}
 \despueslista
 
 \seccion{(d) Píxeles dañados}
 
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{reconstruccion_danada.png}
+    \caption{Comparación entre la imagen observada con píxeles dañados y su reconstrucción}
+    \label{fig:comparación_3}
+  \end{figure}
+
 \begin{enumerate}[label=\roman*., widest=iii]
   \item \textbf{$\tilde{\eta} = \eta + (\tilde{b} - b)$ e interpretación de sus sumandos.}
 
-  \pendiente
+  \subsubsection*{• Demostración $\tilde{\eta} = \eta + (\tilde{b} - b)$}
+
+  Para demostrar que \(\eta=\eta+(\tilde b-b)\), partiremos de la definición para la observación con pixeles dañados \(\tilde b=Ax^\star+\tilde{\eta}\). Despejamos \(\tilde{\eta}\):
+
+  \[
+  \tilde{\eta}=\tilde b-Ax^\star
+  \]
+
+  Por otra parte, de la defición de la observación desenfocada obtenemos \(Ax^\star=b-\eta\). Reemplazamos esto en la ecuación de \(\tilde{\eta}\):
+
+  \[
+  \begin{aligned}
+  \tilde{\eta}
+  &=\tilde b-Ax^\star\\
+  &=\tilde b-(b-\eta)\\
+  &=\eta+(\tilde b-b)
+  \end{aligned}
+  \]
+
+  De esta manera queda demostrado que:
+
+  \[
+  \boxed{\tilde{\eta}=\eta+(\tilde b-b)}
+  \]
+
+  \subsubsection*{• Interpretación de los sumandos}
+
+  *********
 
   \item \textbf{$\norm{\tilde{b} - b}_2$ y comparación de $\norm{\tilde{\eta}}_2$ con $\delta$.}
 
-  \pendiente
+  \subsubsection*{• Resultados numéricos}
+
+  \(\|\tilde{b} - b\|_2\): 10.74
+
+  Delta (\(\delta\)): 0.64
+s
+  \subsubsection*{• Comparación}
+
+  Para realizar la comparación, primero calcularemos \(\|\tilde{\eta}\|_2\). Como quedó demostrado en el ítem (d).i que \(\tilde{\eta}=\eta+(\tilde b-b)\), aplicamos la desigualdad triangular para obtener:
+
+  \[
+  \|\tilde{\eta}\|_2 = \|\eta + (\tilde{b} - b)\|_2 \le \|\eta\|_2 + \|\tilde{b} - b\|_2
+  \]
+
+  Sabemos que \(\|\eta\|_2 \approx \delta = 0.64\) y que \(\|\tilde{b} - b\|_2= 10.74\), reemplazamos los valores numéricos y obtenemos:
+
+  \[
+  \boxed{\|\tilde{\eta}\|_2 \le 0.64 + 10.74 = 11.38}
+  \]
+
+  Al comparar \(\norm{\tilde{\eta}}_2\) con el ruido original (\(\delta=0.64\)), podemos observar que el ruido total es considerablemente mayor debido a los píxeles dañados. Esto coincide con lo observado en la reconstrucción, donde el rostro del mapache deja de distinguirse y aparecen numerosas distorsiones. Por lo tanto, los resultados evidencian cómo las alteraciones adicionales en los datos pueden afectar la calidad de la imagen.
 
   \item \textbf{¿Por qué fracasa la reconstrucción? ¿Bastaría con aumentar $\lambda$?}
 
-  \pendiente
+  *********
+
 \end{enumerate}
 \despueslista
 
-\seccion{(Bonus) Mínimos cuadrados ponderados}
-
-\pendiente
 
 % =====================================================================
 \problema{Red neuronal con dos capas ocultas}
