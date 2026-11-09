@@ -277,9 +277,75 @@ Algunas recomendaciones
 
   \item \textbf{Explicación.}
 
-  *********
+  Sabemos que $x_0$ es la solución calculada mediante mínimos cuadrados (o directamente resolviendo el sistema), por lo que satisface $A x_0 = b$. Además, la observación real está dada por $b = A x^* + \eta$, donde $x^*$ es la imagen verdadera y $\eta$ es el ruido.
 
-\end{enumerate}
+  Igualando ambas expresiones para $b$:
+  \begin{align*}
+  A x_0 &= A x^* + \eta \\
+  A x_0 -A x^* &= \eta\\
+  A(x_0 - x^*) &= \eta
+  \end{align*}
+
+  Multiplicamos a la izquierda por $A^T$:
+  \begin{equation*}
+  A^T A(x_0 - x^*) = A^T \eta
+  \end{equation*}
+
+  Calculamos el producto interno de ambos lados con el vector propio $v_i$:
+  \begin{equation*}
+  \langle A^T A(x_0 - x^*), v_i \rangle = \langle A^T \eta, v_i \rangle
+  \end{equation*}
+
+  Utilizando la propiedad fundamental del producto interno y la matriz transpuesta ($\langle M u, v \rangle = \langle u, M^T v \rangle$), reescribimos:
+  \begin{equation*}
+  \langle x_0 - x^*, A^T A v_i \rangle = \langle \eta, A v_i \rangle
+  \end{equation*}
+
+  Dado que $v_i$ es un vector propio de $A^T A$ asociado al valor propio $\mu_i$, se cumple que $A^T A v_i = \mu_i v_i$. Sustituyendo esto en la ecuación:
+  \begin{equation*}
+  \langle x_0 - x^*, \mu_i v_i \rangle = \langle A v_i, \eta \rangle
+  \end{equation*}
+
+  Como $\mu_i$ es un escalar, sale del producto interno. Finalmente, despejamos:
+  \begin{equation*}
+  \mu_i \langle x_0 - x^*, v_i \rangle = \langle A v_i, \eta \rangle \quad \implies \quad \langle x_0 - x^*, v_i \rangle = \frac{\langle A v_i, \eta \rangle}{\mu_i}
+  \end{equation*}
+
+  \subsection*{Demostración de la cota del error (desigualdad)}
+
+  Tomamos el valor absoluto a la igualdad demostrada en el paso anterior:
+  \begin{equation*}
+  |\langle x_0 - x^*, v_i \rangle| = \frac{|\langle A v_i, \eta \rangle|}{\mu_i}
+  \end{equation*}
+
+  Aplicamos la desigualdad de Cauchy-Schwarz ($|\langle u, v \rangle| \leq \|u\|_2 \|v\|_2$) en el numerador:
+  \begin{equation*}
+  |\langle A v_i, \eta \rangle| \leq \|A v_i\|_2 \|\eta\|_2
+  \end{equation*}
+
+  Para encontrar el valor de $\|A v_i\|_2$, lo elevamos al cuadrado y usamos propiedades del producto interno:
+  \begin{equation*}
+  \|A v_i\|_2^2 = \langle A v_i, A v_i \rangle = \langle v_i, A^T A v_i \rangle = \langle v_i, \mu_i v_i \rangle = \mu_i \|v_i\|_2^2
+  \end{equation*}
+
+  Dado que la base de vectores propios es ortonormal, sabemos que $\|v_i\|_2 = 1$. Por lo tanto, $\|A v_i\|_2^2 = \mu_i$, lo que implica que $\|A v_i\|_2 = \sqrt{\mu_i}$.
+
+  Reemplazando esto en la desigualdad de Cauchy-Schwarz obtenida:
+  \begin{equation*}
+  |\langle x_0 - x^*, v_i \rangle| \leq \frac{\sqrt{\mu_i} \|\eta\|_2}{\mu_i} = \frac{\|\eta\|_2}{\sqrt{\mu_i}}
+  \end{equation*}
+
+  \subsection*{Explicación cualitativa del fallo en la reconstrucción}
+
+  El término $\langle x_0 - x^*, v_i \rangle$ representa la magnitud del error de nuestra reconstrucción $x_0$ con respecto a la imagen original $x^*$ en la dirección del vector $v_i$. Como hemos demostrado, este error es inversamente proporcional a $\sqrt{\mu_i}$.
+
+  El problema radica en que el sistema está sumamente mal condicionado. Se nos indica que existen muchos valores de $\mu_i < 10^{-6}$ y que el mínimo es $\mu_{min} \approx 2 \times 10^{-16}$. 
+
+  Al intentar recuperar la imagen directamente (sin regularización), el ruido $\eta$ se divide por estos valores propios minúsculos. Por ejemplo, dividir por $\sqrt{\mu_{min}}$ equivale a multiplicar el ruido por $\approx 10^8$. Incluso si el ruido inicial es pequeño ($\|\eta\|_2 \approx 0.64$), la amplificación en las direcciones asociadas a valores propios pequeños es astronómica. 
+
+  Dado que los verdaderos píxeles de la imagen pertenecen al intervalo $[0, 1]$, sumarles un error del orden de miles o millones destruye completamente la señal original. Esto explica por qué $x_0$ no se parece a una imagen, teniendo valores máximos irreales y una norma desproporcionadamente alta en lugar de la imagen original.
+
+  \end{enumerate}
 \despueslista
 
 \seccion{(c) Regularización de Tikhonov}
@@ -552,7 +618,23 @@ Algunas recomendaciones
 
   \item \textbf{Interpretación.}
 
-  *********
+A partir de la ecuación demostrada en el inciso anterior:
+\begin{equation*}
+    \langle x_\lambda, v_i \rangle = \frac{\mu_i}{\mu_i + \lambda} \langle x^*, v_i \rangle + \frac{\langle A v_i, \eta \rangle}{\mu_i + \lambda}
+\end{equation*}
+Podemos interpretar el comportamiento de la reconstrucción dependiendo de la relación entre los valores propios $\mu_i$ y el parámetro de regularización $\lambda$:
+
+\begin{itemize}
+
+    \item \textbf{Caso $\mu_i \gg \lambda$:} En este caso, el factor $\frac{\mu_i}{\mu_i + \lambda} \approx 1$. Esto significa que la componente de la imagen verdadera $\langle x^*, v_i \rangle$ se recupera casi íntegramente. Como $\mu_i$ es grande, el término correspondiente al ruido se mantiene controlado y pequeño. Por lo tanto, en estas direcciones (que suelen contener la información estructural principal de la imagen), la señal se conserva.
+    
+    \item \textbf{Caso $\mu_i \ll \lambda$:} Aquí, el factor $\frac{\mu_i}{\mu_i + \lambda} \approx 0$. La componente de la imagen verdadera se suprime o atenúa fuertemente. Sin embargo, el término del ruido ahora queda dividido por un valor cercano a $\lambda$ en lugar del minúsculo $\mu_i$, por lo que el ruido está acotado por $\frac{\|\eta\|_2}{2\sqrt{\lambda}}$ y no explota. El método actúa como un filtro que sacrifica información en estas direcciones para evitar la amplificación catastrófica del ruido.
+    
+    \item \textbf{Si $\lambda$ es muy pequeño ($\lambda \to 0$):} La regularización pierde su efecto y el método se aproxima a la solución de mínimos cuadrados ordinarios ($x_0$). El ruido en las componentes con $\mu_i \approx 0$ se amplificará de manera descontrolada. Se espera obtener una imagen completamente destruida por el ruido, similar a lo observado en el inciso (b).
+    
+    \item \textbf{Si $\lambda$ es muy grande ($\lambda \to \infty$):} El denominador $\mu_i + \lambda$ estará dominado por $\lambda$ para todos los $\mu_i$. Esto fuerza a que $\frac{\mu_i}{\mu_i + \lambda} \to 0$ en todas las componentes, lo que significa que el término de penalización $\|x\|_2^2$ es tan restrictivo que suprime la imagen verdadera. Se espera obtener una imagen que tienda a cero (completamente negra o plana), perdiendo toda información útil.
+    
+\end{itemize}
 
   \item \textbf{Implementación.} Completen la tabla y comparen las reconstrucciones.
 
@@ -624,7 +706,11 @@ Algunas recomendaciones
 
   \subsubsection*{• Interpretación de los sumandos}
 
-  *********
+  El ruido total de la observación defectuosa ($\tilde{\eta}$) está compuesto por la suma de dos efectos físicos distintos:
+
+  1. \textbf{El sumando $\eta$ (Ruido natural del sensor):} Representa el ruido térmico/electrónico estándar presente en cualquier fotografía. Es un ruido de magnitud pequeña ($\|\eta\|_2 \approx 0.64$) y aleatorio.
+  
+  2. \textbf{El sumando $(\tilde{b} - b)$ (Corrupción por daño de hardware):} Representa exclusivamente el error masivo introducido por el $10\%$ de píxeles estropeados. Es un "ruido impulsivo" o determinista de magnitud altísima. Para los píxeles sanos, esta diferencia es cero, pero en los píxeles dañados (clavados en 0 o 1), la diferencia respecto a la observación sana $b$ es enorme, dominando por completo el valor del ruido total $\tilde{\eta}$. \\ 
 
   \item \textbf{$\norm{\tilde{b} - b}_2$ y comparación de $\norm{\tilde{\eta}}_2$ con $\delta$.}
 
@@ -632,8 +718,8 @@ Algunas recomendaciones
 
   \(\|\tilde{b} - b\|_2\): 10.74
 
-  Delta (\(\delta\)): 0.64
-s
+  Delta (\(\delta\)): 0.64s
+  
   \subsubsection*{• Comparación}
 
   Para realizar la comparación, primero calcularemos \(\|\tilde{\eta}\|_2\). Como quedó demostrado en el ítem (d).i que \(\tilde{\eta}=\eta+(\tilde b-b)\), aplicamos la desigualdad triangular para obtener:
@@ -650,13 +736,26 @@ s
 
   Al comparar \(\norm{\tilde{\eta}}_2\) con el ruido original (\(\delta=0.64\)), podemos observar que el ruido total es considerablemente mayor debido a los píxeles dañados. Esto coincide con lo observado en la reconstrucción, donde el rostro del mapache deja de distinguirse y aparecen numerosas distorsiones. Por lo tanto, los resultados evidencian cómo las alteraciones adicionales en los datos pueden afectar la calidad de la imagen.
 
-  \item \textbf{¿Por qué fracasa la reconstrucción? ¿Bastaría con aumentar $\lambda$?}
+  \item \textbf{¿Por qué fracasa la reconstrucción? ¿Bastaría con aumentar $\lambda$?}\\
 
-  *********
+  \textbf{Razón del fracaso:}
+
+  Sustituyendo $\eta$ por $\tilde{\eta}$ en la ecuación derivada en (c.ii), obtenemos:
+  
+\begin{equation*}
+    \langle x_\lambda, v_i \rangle = \frac{\mu_i}{\mu_i + \lambda} \langle x^*, v_i \rangle + \frac{\langle A v_i, \tilde{\eta} \rangle}{\mu_i + \lambda}
+\end{equation*}
+
+  Como se calculó anteriormente, el ruido $\tilde{\eta}$ tiene una norma gigantesca dominada por los píxeles defectuosos ($\tilde{b} - b$). Esto provoca que el numerador del segundo sumando, $\langle A v_i, \tilde{\eta} \rangle$, alcance valores extremos. En consecuencia, el término de error eclipsa por completo a la componente de la imagen verdadera ($\frac{\mu_i}{\mu_i + \lambda} \langle x^*, v_i \rangle$), resultando en una reconstrucción fallida y completamente dominada por el ruido impulsivo.
+
+\textbf{¿Bastaría con aumentar $\lambda$?} \\
+
+  No, no bastaría. Para mitigar un ruido $\tilde{\eta}$ de tal magnitud, sería necesario aumentar $\lambda$ a un valor extremadamente grande. Sin embargo, recordando el análisis cualitativo del inciso (c.iii), si $\lambda$ es excesivamente grande, el denominador $\mu_i + \lambda$ domina para todos los valores propios $\mu_i$. 
+
+  Esto fuerza a que el factor de recuperación de la señal $\frac{\mu_i}{\mu_i + \lambda}$ tienda a $0$. Al hacer esto, no solo suprimiríamos el ruido, sino que borraríamos por completo la imagen verdadera $x^*$. Pasaríamos de una reconstrucción ruidosa a una imagen completamente plana o negra, lo cual explica por qué la regularización de Tikhonov ($L_2$) no es robusta ante valores atípicos (outliers) severos como los píxeles dañados.
 
 \end{enumerate}
 \despueslista
-
 
 % =====================================================================
 \problema{Red neuronal con dos capas ocultas}
