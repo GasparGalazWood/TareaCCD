@@ -895,8 +895,8 @@ s
   Reporten $\theta_0$, $J(\theta_0)$ y el error máximo $E$.
   
   Dado un $\theta$ arbitrario:\\
-  $\theta_0 = (0.95719351\quad -0.40739282\quad  0.30568474\quad -0.7445639\quad   0.20494142\quad -0.44514686)$\\
-  $J(\theta_0) = 1.1384021878323032$
+  $\theta_0 = (-0.28824117\quad -0.08699002\quad  -0.91449653\quad -0.6212921\quad   0.11734601\quad -0.07469821)$\\
+  $J(\theta_0) = 0.7848795168338227$
 
   \begin{table}[H]
   \centering
@@ -904,60 +904,51 @@ s
     \toprule[0.8bp]
     Parámetro & Fórmula de (b) \quad\quad\quad\quad\quad & $D_j$\quad\quad\quad\quad\quad & Diferencia aproximada\\
     \midrule[0.4bp]
-    $a_1$ & $\frac{J(a_1 + 10^{-5}, b_1, a_2, b_2, v, c) - J(a_1 - 10^{-5}, b_1, a_2, b_2, v, c)}{2 \cdot 10^5}$ & $0.0013310336388627773$ & $2.35 \cdot 10^{-11}$\\
-    $b_1$ & $\frac{J(a_1, b_1 + 10^{-5}, a_2, b_2, v, c) - J(a_1, b_1 - 10^{-5}, a_2, b_2, v, c)}{2 \cdot 10^5}$ & $-0.003556580363550665$ & $4.15 \cdot 10^{-11}$\\
-    $a_2$ & $\frac{J(a_1, b_1, a_2 + 10^{-5}, b_2, v, c) - J(a_1, b_1, a_2 - 10^{-5}, b_2, v, c)}{2 \cdot 10^5}$ & $-0.017834567211938435$ & $1.85 \cdot 10^{-11}$\\
-    $b_2$ & $\frac{J(a_1, b_1, a_2, b_2 + 10^{-5}, v, c) - J(a_1, b_1, a_2, b_2 - 10^{-5}, v, c)}{2 \cdot 10^5}$ & $-0.057103042017114795$ & $1.44 \cdot 10^{-11}$\\
-    $v$   & $\frac{J(a_1, b_1, a_2, b_2, v + 10^{-5}, c) - J(a_1, b_1, a_2, b_2, v - 10^{-5}, c)}{2 \cdot 10^5}$ & $-0.4242975415347238$ & $5.04 \cdot 10^{-11}$\\
-    $c$   & $\frac{J(a_1, b_1, a_2, b_2, v, c + 10^{-5}) - J(a_1, b_1, a_2, b_2, v, c - 10^{-5})}{2 \cdot 10^5}$ & $-1.2364438426115676$ & $1.60 \cdot 10^{-13}$\\
+    $a_1$ & $\frac{J(a_1 + 10^{-5}, b_1, a_2, b_2, v, c) - J(a_1 - 10^{-5}, b_1, a_2, b_2, v, c)}{2 \cdot 10^5}$ & $-0.0026258517638044765$ & $2.67 \cdot 10^{-11}$\\
+    $b_1$ & $\frac{J(a_1, b_1 + 10^{-5}, a_2, b_2, v, c) - J(a_1, b_1 - 10^{-5}, a_2, b_2, v, c)}{2 \cdot 10^5}$ & $0.004549815707521887$ & $5.44 \cdot 10^{-12}$\\
+    $a_2$ & $\frac{J(a_1, b_1, a_2 + 10^{-5}, b_2, v, c) - J(a_1, b_1, a_2 - 10^{-5}, b_2, v, c)}{2 \cdot 10^5}$ & $-0.010386437077070099$ & $1.53 \cdot 10^{-11}$\\
+    $b_2$ & $\frac{J(a_1, b_1, a_2, b_2 + 10^{-5}, v, c) - J(a_1, b_1, a_2, b_2 - 10^{-5}, v, c)}{2 \cdot 10^5}$ & $-0.019980829651933263$ & $1.61 \cdot 10^{-11}$\\
+    $v$   & $\frac{J(a_1, b_1, a_2, b_2, v + 10^{-5}, c) - J(a_1, b_1, a_2, b_2, v - 10^{-5}, c)}{2 \cdot 10^5}$ & $-0.22715555679786445$ & $1.92 \cdot 10^{-11}$\\
+    $c$   & $\frac{J(a_1, b_1, a_2, b_2, v, c + 10^{-5}) - J(a_1, b_1, a_2, b_2, v, c - 10^{-5})}{2 \cdot 10^5}$ & $-0.9073814595084161$ & $8.23 \cdot 10^{-12}$\\
     \bottomrule[0.8bp]
   \end{tabular}
   \caption{Gradiente en $\theta_0$: fórmulas de (b) y diferencias centradas.}
   \label{tab:gradiente}
 \end{table}
 
-  Notamos que, al utilizar $\theta_0$, el mayor error absoluto se presenta al calcular la diferencia correspondiente al parametro v, tal que:
-\[E = |\frac{\partial J}{\partial v}\theta_0 - D_5| \approx 5.04 \cdot 10^{-11}\]
+  Notamos que, al utilizar $\theta_0$, el mayor error absoluto se presenta al calcular la diferencia correspondiente al parametro $a_1$, tal que:
+\[E = |\frac{\partial J}{\partial a_1}\theta_0 - D_1| \approx 2.67 \cdot 10^{-11}\]
 
 \seccion{(d) Descenso del gradiente}
 
-  Creamos una función para calcular el decenso del gradiente, con $\alpha_2 = 1$ de la forma $\theta_k+1 = \theta_k −\alpha_2 \nabla J(\theta_k)$
-  y otra similar para obtener el error de cada una de las k iteraciones, con esto podemos ver que la evolución del error en el siguiente gráfico
+\begin{figure}[htbp]
+    \centering
 
-  \begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{evo_des_gradiente.png}
-  \caption{Gráfico de la evolución del descenso del gradiente.}
-  \label{fig:evo_gradiente}
-  \end{figure}
+    \includegraphics[width=0.48\textwidth]{figuras/figuras_p2/evo_des_gradiente.png}
+    \hfill
+    \includegraphics[width=0.48\textwidth]{figuras/figuras_p2/evo_des_gradiente_cambio.png}
 
-  Dado que este gráfico no nos permite ver con claridar el cambio, modificamos los parametros para observarlo de mejor manera
+    \caption{Evolución del error $J(\theta_k)$ en función de $k$.}
+    \label{fig:evolucion_error}
+\end{figure}
 
-  \begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{evo_des_gradiente_cambio.png}
-  \caption{Gráfico de la evolución del descenso del gradiente (centrado en el cambio).}
-  \label{fig:evo_gradiente_cambio}
-  \end{figure}
 
-  Como podemos ver, la forma del gráfico es una curva en descenso que acelera la reducción de su error entre los k 100 y 150, la forma es vagamente similar a una s invertida.
+La grafica presenta un comportamiento decreciente no lineal, inicialmente el error disminuye de manera suave, luego aproximadamente en el rango de iteraciones [90, 160] la funcion desciende abruptamente, hasta que se estabiliza en un valor cercano a 0, indicando que esta ha llegado a un minimo, tal que el comportamiento del método de descenso gradiente converge rapidamiente a un minimo cercano a 0.
 
+\bigskip\bigskip\bigskip\bigskip
 
 \seccion{(e) Parámetros encontrados}
 
-  El valor encontrado para $\theta_0$ es [4.82070175710775, 0.680190806366675, -4.054068759861999, 0.6141261364555466, 3.5773664096641298, -0.10006448173910788]
-  Y el error $J(\theta_20000)$ es 0.0013927707069917585
+Los valores encontrados:\\
+$\theta_{20000} \approx (4.8207018, 0.6801908, -4.0540688, 0.6141261, 3.5773664, -0.1000645)$\\
+$J(\theta_{20000}) = 0.0013927707069917585$
 
-  El siguiente gráfico no permite comparar los valores de entrenamiento con los obtenidos mediante $\hat{y}(x;\theta_20000)$
-
-  \begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{entrenamientoXcurva.png}
-  \caption{Gráfico comparativo.}
-  \label{fig:entrexcurva}
-  \end{figure}
-
-  Por lo que podemos observar se aproxima adecuadamente.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/figuras_p2/entrenamientoXcurva.png}
+    \caption{entrenamiento y curva $x \mapsto \hat{y}(x;\theta_{20.000})$}
+    \label{fig:entrenamientoXcurva}
+\end{figure}
 
 \seccion{(f) Sensibilidad del entrenamiento}
 
