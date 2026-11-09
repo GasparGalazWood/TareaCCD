@@ -977,7 +977,27 @@ $J(\theta_{20000}) = 0.0013927707069917585$
 
   \item \textbf{Distintas inicializaciones.}
 
-  \pendiente
+  Repetimos d) con $\alpha = 1$, pero ahora utilizando 10 inicializaciones distintas entre [-1, 1] y otrad 10 entre [-5, 5]
+  Los errores obtenidos fueron:
+  \begin{tabular}{r l}
+$\theta_0 \in [-1,1]$ & $\theta_0 \in [-5,5]$ \\
+0.0013955411621448908 & 0.0014451338507139248 \\
+0.001395355166404074 & 0.0013924007734941698 \\
+0.0013954968993459397 & 0.0013988754077034768 \\
+0.0014107347943005208 & 0.0014085433050804988 \\
+0.0014059993258779813 & 0.0014211774414186044 \\
+0.001416276508584076 & 0.001479627709811132 \\
+0.0014153748402427463 & 0.37248297413788406 \\
+0.001409257906983144 & 0.001400460223499488 \\
+0.0014076924339753395 & 0.0014261599687102303 \\
+0.0014149900866107252 & 0.0013918742850255864 \\
+\end{tabular}
+  (El orden no es importante ya que no hay relación entre las columnas)
+
+  Como podemos ver, no simepre se alcanza el mismo valor de J, sin embargo se alcanza valores similares, incluso iguales hasta la centésima, de modo que vemos que la aproximación es correcta
+  Sin embargo [-5,5] presenta errores mayores, lo que se debe a que al tener un |t| grande la función σ′(t) se asemeja demasiado a cero lo que afecta a la resta en el cálculo de la gradiente, evitando que el valor varíe adecuadamente
+  El descenso no garantiza alcanzar el mínimo global de J, ya que no es seguro que la aproximación llegue a ser exacta, sin importar cuanto se asemeje al valor esperado.
+
 \end{enumerate}
 \despueslista
 
