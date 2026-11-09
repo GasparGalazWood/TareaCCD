@@ -1049,37 +1049,4 @@ Como se demostró en los puntos anteriores, la arquitectura de esta red neuronal
 Debido a esta limitación estructural, la red es incapaz de "doblarse" para reflejar subidas y bajadas. Por lo tanto, es matemáticamente imposible que esta red se ajuste de forma correcta a la función $\tilde{f}$, sin importar cuántas iteraciones se realicen en el entrenamiento, el tamaño del paso ($\alpha$) elegido o los valores de inicialización ($\theta_0$).
 \end{enumerate}
 
-% =====================================================================
-\clearpage\markright{}
-\seccionsinnumero{Ejemplos de uso (borren esta sección antes de entregar)}
-% =====================================================================
-
-\seccion{Ecuaciones}
-
-Una ecuación destacada se escribe entre \code{\textbackslash[} y \code{\textbackslash]}:
-\[ \nabla J_0(x) = 2A^T(Ax - b). \]
-Para varias líneas alineadas, usen \code{align*}:
-\begin{align*}
-  J_\lambda(x) &= \norm{Ax - b}_2^2 + \lambda \norm{x}_2^2 \\
-               &= x^T (A^T A + \lambda I) x - 2 (A^T b)^T x + b^T b.
-\end{align*}
-La plantilla define \code{\textbackslash norm\{x\}}, \code{\textbackslash abs\{x\}}, \code{\textbackslash ip\{u\}\{v\}} (producto interno $\ip{u}{v}$), \code{\textbackslash R} ($\R$) y \code{\textbackslash diag}.
-
-\seccion{Figuras}
-
-Guarden la figura desde el notebook en la carpeta \code{figuras/} e inclúyanla así:
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=6cm]{ejemplo_b.png}
-  \caption{Imagen observada $b$ (ejemplo con los datos de la pauta).}
-  \label{fig:ejemplo}
-\end{figure}
-Para referirse a ella, escriban \code{Figura\textasciitilde\textbackslash ref\{fig:ejemplo\}}: Figura~\ref{fig:ejemplo}.
-
-\seccion{Cajas de comentarios}
-
-\begin{nota}[Observación]
-  Si quieren destacar un comentario, usen el entorno \code{nota}.
-\end{nota}
-
 \end{document}
