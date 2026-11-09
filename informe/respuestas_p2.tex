@@ -955,7 +955,25 @@ $J(\theta_{20000}) = 0.0013927707069917585$
 \begin{enumerate}[label=\roman*., widest=ii]
   \item \textbf{Tamaño del paso.}
 
-  \pendiente
+  Repetimos d), ahora para los $\alpha = 0.01, 0.1, 1, 2.5$ y observamos la gráfica de sus errores
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/figuras_p2/cuatro_curvas_error.png}
+    \caption{Evolución errores de los 4 pasos}
+    \label{fig:cuatro_error}
+\end{figure}
+
+  Dado que este gráfico no nos permite ver las curvas de cada paso, hacemos uno diferente para visualizar los pasos 0,01; 0,1 y 1
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/figuras_p2/tres_curvas_error.png}
+    \caption{Evolución errores de los 3 pasos más pequeños}
+    \label{fig:cuatro_error}
+\end{figure}
+
+  Cuando el paso es muy grande, el error aumenta de forma veloz y nunca se acerca al valor esperado, mientras que el paso más pequeño reduce el error lentamente, los pasos más cercanos a 1 parecen ser los que reducen el error a una mayor velocidad
 
   \item \textbf{Distintas inicializaciones.}
 
