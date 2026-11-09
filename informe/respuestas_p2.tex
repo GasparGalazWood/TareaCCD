@@ -1,0 +1,983 @@
+% =====================================================================
+% Plantilla de respuestas · Tarea Computacional · IMT2220 (2026-2)
+% =====================================================================
+% Cómo usarla:
+%   1. Completen el número de grupo y los integrantes (más abajo).
+%   2. Reemplacen cada \pendiente por su desarrollo y su respuesta.
+%   3. Las figuras que guarden desde sus notebooks van en la carpeta figuras/.
+%   4. Compilen con pdfLaTeX (en Overleaf es el compilador por defecto) o con LuaLaTeX.
+%
+% En Overleaf: New Project > Upload Project y suban el .zip con esta carpeta.
+% Pueden borrar estos comentarios y las cajas de "Indicaciones" cuando terminen.
+\documentclass{article}
+\usepackage{plantilla}
+\graphicspath{{figuras/}}
+\settitulo{Tarea Computacional}
+
+% ---------------------------------------------------------------------
+% Datos del grupo
+% ---------------------------------------------------------------------
+\newcommand\grupo{2}   % <-- número del grupo
+\integrantes{%
+  Alondra Estay \\
+  Gaspar Galaz \\
+  José Mora \\
+  Renato Reyes}
+
+% Marca para lo que falta por completar (búsquenla con Ctrl+F antes de entregar)
+\newcommand\pendiente{{\color{gris90}\itshape [Escriban aquí su desarrollo y su respuesta.]}}
+
+\begin{document}
+
+\portada[Grupo \grupo]
+
+% =====================================================================
+\seccionsinnumero{Indicaciones para usar esta plantilla}
+% =====================================================================
+
+\begin{nota}[Indicaciones]
+  Esta plantilla es recomendada para resolver la tarea (aunque pueden utilizar cualquier otro formato mientras cumplan con lo solicitado).
+  Pueden reemplazar cada \pendiente{} por su desarrollo.
+  Al final de este archivo hay ejemplos de cómo escribir ecuaciones, incluir figuras y tablas. Borren esa página antes de entregar.
+\end{nota}
+
+Algunas recomendaciones
+\begin{itemize}
+  \item \textbf{Desarrollo.} Justifiquen cada paso: no basta con el resultado. Cuando usen un resultado de clases, menciónenlo.
+  \item \textbf{Resultados numéricos.} Reporten los valores que se piden (normas, residuos, $J(\theta)$, etc.) con 3 o 4 cifras significativas e indiquen de qué celda del notebook salen. (Esto no es estrictamente necesario, pero sí recomendado.)
+  \item \textbf{Figuras.} Guárdenlas desde el notebook con \code{plt.savefig("figuras/nombre.png", dpi=200, bbox\_inches="tight")}, súbanlas a la carpeta \code{figuras/} (para que puedan añadirlas aquí) y comenten lo que se ve en ellas.
+\end{itemize}
+\despueslista
+
+% =====================================================================
+\problema{Reconstrucción de una imagen}
+% =====================================================================
+
+\seccion{(a) Mínimos cuadrados}
+
+\begin{enumerate}[label=\roman*., widest=iii]
+  \item \textbf{Gradiente y matriz Hessiana de $J_0$.}
+
+  Consideraremos la función:
+  \[
+  J_0(x)=\|Ax-b\|_2^2
+  \]
+
+  \subsubsection*{• Cálculo del gradiente}
+
+  Para calcular el gradiente, primero expandiremos la función utilizando la propiedad de la norma euclidiana al cuadrado, \(\|x\|_2^2=x^Tx\):
+
+  \[
+  \begin{aligned}
+  J_0(x) &= (Ax-b)^T(Ax-b)\\
+  &=x^TA^TAx-x^TA^Tb-b^TAx+b^Tb
+  \end{aligned}
+  \]
+
+  Como \(x^TA^Tb\) es un escalar, es igual a su transpuesta, es decir, \(x^TA^Tb=(x^TA^Tb)^T=b^TAx\).
+
+  Al tener esto en consideración, podemos agrupar los términos del medio y obtener:
+
+  \[
+  J_0(x)=x^TA^TAx-2x^TA^Tb+b^Tb
+  \]
+
+  Con la función expresada de esta forma, podemos calcular su gradiente derivando cada término respecto del vector \(x\). Realizando la derivación, obtenemos que el gradiente de \(J_0\) es:
+
+  \[
+  \boxed{\nabla J_0(x)=2A^T(Ax-b)}
+  \]
+
+  \subsubsection*{• Cálculo de la Matriz Hessiana}
+
+  Para calcular la matriz Hessiana, debemos encontrar las segundas derivadas parciales de una función. En este caso, como \(J_0(x)\) depende del vector \(x\), podemos obtener la Hessiana derivando el gradiente respecto de \(x\), considerando que las matrices \(A\) y \(A^T\) y el vector \(b\) son constantes.
+
+  Por lo tanto, la matriz Hessiana es:
+
+  \[
+  \boxed{H_{J_0}=2A^TA}
+  \]
+
+  \bigskip
+  \bigskip
+  \bigskip
+  \bigskip
+
+  \subsubsection*{• Deducción de las ecuaciones normales}
+
+  Para demostrar que los puntos críticos de \(J_0(x)\) corresponden a las soluciones de las ecuaciones normales, debemos recordar que un punto crítico de una función es aquel donde su gradiente es igual a cero. Por lo que utilizaremos el gradiente obtenido anteriormente y lo igualaremos a cero:
+
+  \[
+  \nabla J_0(x)=2A^T(Ax-b)=0
+  \]
+
+  Simplificamos dividiendo por \(2\) y reordenamos los términos:
+
+  \[
+  \begin{aligned}
+  A^T(Ax-b)&=0\\
+  A^TAx-A^Tb&=0\\
+  A^TAx&=A^Tb
+  \end{aligned}
+  \]
+
+  De esta manera, obtenemos la expresión para las ecuaciones normales:
+
+  \[
+  \boxed{A^TAx=A^Tb}
+  \]
+
+  Por lo tanto, concluimos que si un vector \(x\) es un punto crítico de \(J_0(x)\), entonces necesariamente satisface las ecuaciones normales.
+
+  \bigskip
+
+  \item \textbf{$H_{J_0}$ es semidefinida positiva y todo punto crítico es un mínimo global.}
+
+  \subsubsection*{• Demostración de la Hessiana semidefinida positiva}
+
+  Para demostrar que una matriz \(H\) es semidefinida positiva, se debe cumplir que \(v^THv\geq 0\) para cualquier vector \(v\in\mathbb{R}^n\).
+
+  Del ítem (a).i, obtuvimos que la matriz Hessiana es: \(H_{J_0}=2A^TA\)
+
+  Dado que \(H_{J_0}\) es simétrica, ya que \((2A^TA)^T=2A^TA\), evaluamos la condición anterior tomando un vector cualquiera \(v\in\mathbb{R}^n\) y reemplazamos los valores:
+
+  \[
+  \begin{aligned}
+  v^TH_{J_0}v
+  &=v^T(2A^TA)v\\
+  &=2v^TA^TAv\\
+  &=2(Av)^T(Av)\\
+  &=2\|Av\|_2^2
+  \end{aligned}
+  \]
+
+  Sabemos que una norma al cuadrado siempre es mayor o igual a cero. Por lo tanto:
+
+  \[
+  \boxed{v^TH_{J_0}v=2\|Av\|_2^2\geq 0}
+  \]
+
+  Como esta desigualdad se cumple para cualquier vector \(v\), concluimos que la matriz Hessiana \(H_{J_0}\) es semidefinida positiva.
+
+  \vspace{0.5cm} % Espacio en blanco opcional
+
+  \subsubsection*{• Demostración de que todo punto crítico es un mínimo global}
+
+  Para demostrar que cualquier punto crítico de \(J_0(x)\) es un mínimo global, utilizaremos la aproximación de Taylor de segundo orden. Al ser \(J_0(x)\) una función cuadrática, esta aproximación es exacta y podemos expresarla como:
+
+  \[
+  J_0(x)=J_0(x_0)+\nabla J_0(x_0)^T(x-x_0)+\frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)
+  \]
+
+  Considerando \(x_0\) un punto crítico, sabemos que su gradiente es igual a cero, es decir, \(\nabla J_0(x_0)=0\). Teniendo esto en cuenta, podemos simplificar la expresión obteniendo:
+
+  \[
+  J_0(x)=J_0(x_0)+\frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)
+  \]
+
+  Además, como demostramos anteriormente que la matriz Hessiana es semidefinida positiva, el término cuadrático es siempre mayor o igual a cero:
+
+  \[
+  \frac{1}{2}(x-x_0)^TH_{J_0}(x-x_0)\geq 0
+  \]
+
+  De esta manera, obtenemos:
+
+  \[
+  \boxed{J_0(x)\geq J_0(x_0)}
+  \]
+
+  Con esto podemos deducir que el valor de la función en cualquier punto \(x\) es mayor o igual que su valor en el punto crítico \(x_0\). Por lo tanto, concluimos que todo punto crítico de \(J_0(x)\) es un mínimo global de la función.
+
+  \bigskip
+
+  \item \textbf{Unicidad o infinitos minimizadores.}
+
+  \subsubsection*{• Todos los valores propios de \(A^TA\) son positivos}
+
+  Si todos los valores propios de \(A^TA\) son positivos, entonces esta matriz es definida positiva y, por lo tanto, invertible.
+
+  Del ítem (a).i, sabemos que todos los puntos críticos de \(J_0(x)\) satisfacen las ecuaciones normales:
+
+  \[
+  A^TAx=A^Tb
+  \]
+
+  Como \(A^TA\) es invertible, multiplicamos ambos lados por su inversa para despejar \(x\):
+
+  \[
+  \boxed{x=(A^TA)^{-1}A^Tb}
+  \]
+
+  Por lo tanto, las ecuaciones normales tienen una única solución, la cual corresponde a un mínimo global de \(J_0(x)\), según lo demostrado en el ítem (a).ii. Con esto podemos concluir que, cuando todos los valores propios de \(A^TA\) son positivos, la función \(J_0(x)\) tiene un único minimizador global.
+
+  \bigskip
+
+  \subsubsection*{• \(A^TA\) tiene al menos un valor propio nulo}
+
+  Si \(A^TA\) tiene un valor propio igual a cero, entonces existe un vector \(v\neq 0\) tal que \(A^TAv=0\).
+
+  Multiplicando por \(v^T\) y utilizando la propiedad de la norma euclidiana, obtenemos:
+
+  \[
+  v^TA^TAv=\|Av\|_2^2=0
+  \]
+
+  Como una norma solo es cero cuando el vector es nulo, concluimos que \(Av=0\).
+
+  Para demostrar que existen infinitos minimizadores, consideramos un punto crítico \(x_0\) de \(J_0(x)\), que por lo demostrado en el ítem (a).ii también es un mínimo global. A partir de este punto, podemos construir nuevos vectores de la forma \(x_t=x_0+tv\), con \(t\in\mathbb{R}\). Para comprobar si estos también son minimizadores, los reemplazamos en la función:
+
+  \[
+  \begin{aligned}
+  J_0(x_t)
+  &=\|A(x_0+tv)-b\|_2^2\\
+  &=\|Ax_0+tAv-b\|_2^2\\
+  &=\|Ax_0-b\|_2^2\\
+  &=J_0(x_0)
+  \end{aligned}
+  \]
+
+  Como \(Av=0\), todos los vectores \(x_t\) entregan el mismo valor de la función que \(x_0\), por lo que también son mínimos globales. Además, como \(v\neq 0\) y \(t\) puede tomar infinitos valores, podemos generar infinitos vectores distintos. Por lo tanto, concluimos que, si \(A^TA\) tiene al menos un valor propio nulo, la función \(J_0(x)\) tiene infinitos minimizadores globales.
+\end{enumerate}
+\despueslista
+
+\seccion{(b) Reconstrucción}
+
+\begin{enumerate}[label=\roman*., widest=ii]
+  \item \textbf{Implementación.} Reporten $\norm{x_0}_2$, $\max_i \abs{x_{0,i}}$ y $\norm{Ax_0 - b}_2$, muestren lado a lado $b$ y $x_0$, y respondan las preguntas.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{reconstruccion_b.png}
+    \caption{Comparación imagen Observada b y Reconstrucción \(x_0\)}
+    \label{fig:comparación_1}
+  \end{figure}
+
+  \subsection*{• Respuestas}
+
+  Resultados Numéricos:
+
+  - Norma: \(\|x_0\|_2=3.503\cdot10^5\)
+
+  - Máximo Absoluto: \(\max_i|x_{0,i}|=1.871\cdot10^4\)
+
+  - Residuo: \(\|Ax_0-b\|_2=5.626\cdot10^{-12}\)
+
+  \smallskip
+
+  Al comparar las imágenes, se observa claramente que la imagen \(x_0\) no se parece a la imagen observada \(b\). Si bien esta última se encuentra desenfocada, todavía es posible distinguir las características y el rostro de lo que parece ser un mapache. En cambio, en \(x_0\) se pueden observar píxeles blancos y negros que impiden identificar alguna figura reconocible.
+
+  Esta distorsión se puede entender a partir de los resultados numéricos obtenidos. En primer lugar, la norma de la reconstrucción es \(\|x_0\|_2=3.503\cdot10^5\). Sabiendo que la norma máxima de una imagen válida es de \(64\), podemos notar cómo la norma obtenida es considerablemente mayor a la esperada, lo que provoca que su magnitud sea desproporcionada y dificulte la interpretación de los píxeles obtenidos.
+
+  Por otro lado, se obtuvo que el máximo absoluto de sus componentes es \(\max_i|x_{0,i}|=1.871\cdot10^4\). Esta cifra es significantivamente superior, considerando la intensidad de cada píxel debería pertener al intervalo \([0,1]\). Al no respetarse estos límites, los píxeles se saturan creando contrastes extremos de blanco y negro que arruinan la imagen reconstruida.
+
+  Finalmente, el residuo obtenido es \(\|Ax_0-b\|_2=5.626\cdot10^{-12}\), un valor que es prácticamente cero. Gracias a este resultado sabemos que \(x_0\) satisface el sistema \(Ax=b\). Sin embargo, esto no garantiza que la solución obtenida tenga sentido como imagen.
+
+  En conclusión, aunque \(x_0\) satisface el sistema, sus valores no cumplen las condiciones esperadas para una imagen válida, lo que concuerda con la distorsión que se observa en la reconstrucción.
+
+  \item \textbf{Explicación.}
+
+  *********
+
+\end{enumerate}
+\despueslista
+
+\seccion{(c) Regularización de Tikhonov}
+
+\begin{enumerate}[label=\roman*., widest=iv]
+
+  \item \textbf{Gradiente, Hessiana y único minimizador global.}
+
+  Para \(\lambda > 0\) consideramos la función:
+
+  \[
+  J_\lambda(x)=\|Ax-b\|_2^2+\lambda\|x\|_2^2
+  \]
+
+  \subsubsection*{• Cálculo del gradiente}
+
+  Para calcular el gradiente, necesitamos derivar cada término de la función respecto del vector \(x\). En primer lugar, podemos notar que el primer término de \(J_\lambda(x)\) corresponde a la función \(J_0(x)\) analizada en la parte (a). Por lo tanto, sabemos que:
+
+  \[
+  J_0(x)=\|Ax-b\|_2^2
+  \implies
+  \nabla J_0(x)=2A^T(Ax-b)
+  \]
+
+  Para el segundo término de la función, utilizamos la propiedad de la norma euclidiana al cuadrado (\(\|x\|_2^2=x^Tx\)) para reescribirlo y facilitar el cálculo de su gradiente:
+
+  \[
+  \lambda\|x\|_2^2=\lambda x^Tx
+  \]
+
+  Como \(\lambda\) es una constante, al derivar respecto de \(x\) obtenemos:
+
+  \[
+  \nabla(\lambda x^Tx)=2\lambda x
+  \]
+
+  Sumando los gradientes de cada término, obtenemos que el gradiente de \(J_\lambda\) es:
+
+  \[
+  \boxed{\nabla J_\lambda(x)=2A^T(Ax-b)+2\lambda x}
+  \]
+
+  \subsubsection*{• Cálculo de la Matriz Hessiana}
+
+  Para calcular la matriz Hessiana, debemos encontrar las segundas derivadas parciales de una función. En este caso, \(J_\lambda\) depende del vector \(x\), podemos obtener la Hessiana derivando el gradiente respecto de \(x\), considerando que las matrices \(A\) y \(A^T\), el vector \(b\) y el parámetro \(\lambda\) son constantes.
+
+  Como la derivada de \(2A^T(Ax-b)\) es \(2A^TA\) y la derivada de \(2\lambda x\) es \(2\lambda I\), la matriz Hessiana es:
+
+  \[
+  \boxed{H_{J_\lambda}=2A^TA+2\lambda I}
+  \]
+
+  \subsubsection*{• Valores propios de \(H_{J_\lambda}\)}
+
+  Para demostrar que todos los valores propios de \(H_{J_\lambda}\) son mayores o iguales que \(2\lambda\), analizaremos cómo actúan los vectores propios de la Hessiana. Dado que \(H_{J_\lambda}=2(A^TA+\lambda I)\), y considerando que sumar un múltiplo de la matriz identidad no altera los vectores propios de una matriz, podemos usar directamente los vectores propios de \(A^TA\).
+
+  Para ello, consideraremos que los vectores propios de \(A^TA\) cumplen con la propiedad \((A^TA)v_i=\mu_i v_i\), donde \(v_i\) es un vector propio no nulo y \(\mu_i\) su valor propio asociado. A partir de esta propiedad, evaluamos la Hessiana y obtenemos que:
+
+  \[
+  \begin{aligned}
+  H_{J_\lambda}v_i
+  &=2(A^TA+\lambda I)v_i\\
+  &=2(A^TAv_i+\lambda v_i)\\
+  &=2(\mu_i v_i+\lambda v_i)\\
+  &=2(\mu_i+\lambda)v_i
+  \end{aligned}
+  \]
+
+  Con este resultado, confirmamos que \(v_i\) también es un vector propio de \(H_{J_\lambda}\) y que su valor propio asociado es \(2(\mu_i+\lambda)\).
+
+  Como en el ítem (a).ii se demostró que \(A^TA\) es una matriz semidefinida positiva, sabemos que sus valores propios cumplen con \(\mu_i\geq0\). Además, considerando que por enunciado sabemos que \(\lambda>0\), concluimos que:
+
+  \[
+  \boxed{2(\mu_i+\lambda)\geq2\lambda}
+  \]
+
+  De esta manera, queda demostrado que todos los valores propios de la matriz \(H_{J_\lambda}\) son mayores o iguales que \(2\lambda\).
+
+  \subsubsection*{• Unicidad y existencia del minimizador global}
+
+  Para demostrar que la función \(J_\lambda(x)\) tiene un único minimizador global, partiremos de que \(H_{J_\lambda}\) es definida positiva ya que todos sus valores propios son estrictamente positivos. Esto implica que la función es estrictamente convexa, lo que nos permite asegurar que, de existir un punto crítico, este será único y corresponderá al mínimo global.
+
+  Para encontrar este punto, igualaremos el gradiente calculado en un inicio a cero:
+
+  \[
+  \nabla J_\lambda(x)=2A^T(Ax-b)+2\lambda x=0
+  \]
+
+  Simplificamos dividiendo por \(2\) y reordenamos términos:
+
+  \[
+  \begin{aligned}
+  A^T(Ax-b)+\lambda x&=0\\
+  A^TAx-A^Tb+\lambda x&=0\\
+  A^TAx+\lambda x&=A^Tb\\
+  (A^TA+\lambda I)x&=A^Tb
+  \end{aligned}
+  \]
+
+  Como los valores propios de \((A^TA+\lambda I)\) son estrictamente positivos, la matriz es invertible. Al multiplicar por su inversa, despejamos la solución única:
+
+  \[
+  \boxed{x_\lambda=(A^TA+\lambda I)^{-1}A^Tb}
+  \]
+
+  Con esto se concluye que \(J_\lambda(x)\) tiene un único minimizador global, y es \(x_\lambda\).
+
+  \bigskip
+
+  \item \textbf{Descomposición de $\ip{x_\lambda}{v_i}$ y cota del aporte del ruido.}
+
+  \subsubsection*{• Descomposición de $\ip{x_\lambda}{v_i}$}
+
+  Para realizar la primera demostración, partiremos de la ecuación obtenida en el ítem (c).i:
+
+  \[
+  x_\lambda=(A^TA+\lambda I)^{-1}A^Tb
+  \]
+
+  Como sabemos que \(b=Ax^\star+\eta\), sustituimos esta expresión en la fórmula de \(x_\lambda\):
+
+  \[
+  \begin{aligned}
+  x_\lambda&=(A^TA+\lambda I)^{-1}A^T(Ax^\star+\eta)\\
+  &=(A^TA+\lambda I)^{-1}A^TAx^\star+(A^TA+\lambda I)^{-1}A^T\eta
+  \end{aligned}
+  \]
+
+  A continuación, calcularemos el producto interno de \(\langle x_\lambda,v_i\rangle\). Para esto, reemplazamos la expresión de \(x_\lambda\) y distribuimos la suma por linealidad (\(\langle a+b,c\rangle=\langle a,c\rangle+\langle b,c\rangle\)):
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle (A^TA+\lambda I)^{-1}A^TAx^\star+(A^TA+\lambda I)^{-1}A^T\eta,v_i\right\rangle\\
+  &=\left\langle (A^TA+\lambda I)^{-1}A^TAx^\star,v_i\right\rangle+\left\langle (A^TA+\lambda I)^{-1}A^T\eta,v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Luego, trasladamos la matriz al segundo argumento mediante la propiedad \(\langle Mu, v \rangle = \langle u, M^T v \rangle\). Como \((A^T A + \lambda I)^{-1}\) es simétrica, su tranpuesta es igual a si misma:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle A^TAx^\star,(A^TA+\lambda I)^{-1}v_i\right\rangle+\left\langle A^T\eta,(A^TA+\lambda I)^{-1}v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Como \(v_i\) es un vector propio de \(A^TA\), tal que \(A^TAv_i=\mu_i v_i\). Al sumar \(\lambda I\), obtenemos:
+
+  \[
+  \begin{aligned}
+  (A^TA+\lambda I)v_i
+  &=A^TAv_i+\lambda Iv_i\\
+  &=\mu_i v_i+\lambda v_i\\
+  &=(\mu_i+\lambda)v_i
+  \end{aligned}
+  \]
+
+  \bigskip
+
+  Como \(\mu_i+\lambda>0\), podemos multiplicar por la inversa y despejar:
+
+  \[
+  (A^TA+\lambda I)^{-1}v_i=\frac{1}{\mu_i+\lambda}v_i
+  \]
+
+  Reemplazamos esta expresión en los productos internos:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\left\langle A^TAx^\star,\frac{1}{\mu_i+\lambda}v_i\right\rangle+\left\langle A^T\eta,\frac{1}{\mu_i+\lambda}v_i\right\rangle
+  \end{aligned}
+  \]
+
+  Aplicando la propiedad \(\langle a,cv\rangle=c\langle a,v\rangle\), sacamos los escalares de los productos internos y volviendo a utilizar \(\langle Mu,v\rangle=\langle u,M^Tv\rangle\) para trasladar las matrices restantes (teniendo en cuenta que, \(A^TA\) es simétrica, y que la transpuesta de \(A^T\) es \(A\)), obtenemos:
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\frac{1}{\mu_i+\lambda}\langle x^\star,A^TAv_i\rangle+\frac{1}{\mu_i+\lambda}\langle\eta,Av_i\rangle
+  \end{aligned}
+  \]
+
+  Por último, reemplazamos \(A^TAv_i=\mu_i v_i\), sacamos el escalar \(\mu_i\) y aplicamos la propiedad de simetría del producto interno \(\langle a,b\rangle=\langle b,a\rangle\):
+
+  \[
+  \begin{aligned}
+  \langle x_\lambda,v_i\rangle
+  &=\frac{1}{\mu_i+\lambda}\langle x^\star,\mu_i v_i\rangle+\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\\
+  &=\frac{\mu_i}{\mu_i+\lambda}\langle x^\star,v_i\rangle+\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}
+  \end{aligned}
+  \]
+
+  De esta manera, queda demostrado que:
+
+  \[
+  \boxed{
+  \langle x_\lambda,v_i\rangle
+  =
+  \frac{\mu_i}{\mu_i+\lambda}\langle x^\star,v_i\rangle
+  +
+  \frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}
+  }
+  \]
+
+  \subsubsection*{• Cota aporte de ruido}
+
+  Para realizar la segunda demostración, partiremos del término asociado al ruido obtenido en la primera igualdad:
+
+  \[
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \]
+
+  Utilizaremos la desigualdad de Cauchy-Schwarz, que establece que \(|\langle u,v\rangle|\leq\|u\|_2\|v\|_2\). Aplicando esta propiedad al producto interno \(\langle Av_i,\eta\rangle\), obtenemos:
+
+  \[
+  \begin{aligned}
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  =\frac{|\langle Av_i,\eta\rangle|}{\mu_i+\lambda}\
+  \leq\frac{\|Av_i\|_2\|\eta\|_2}{\mu_i+\lambda}
+  \end{aligned}
+  \]
+
+  Para calcular la norma de \(Av_i\), partiremos de su cuadrado (\(\|u\|_2^2=u^Tu\)), y aplicaremos la relación del vector propio \(A^TAv_i=\mu_i v_i\):
+
+  \[
+  \begin{aligned}
+  \|Av_i\|_2^2
+  &=(Av_i)^T(Av_i)\\
+  &=v_i^TA^TAv_i\\
+  &=v_i^T(\mu_i v_i)\\
+  &=\mu_i v_i^Tv_i
+  \end{aligned}
+  \]
+
+  Como los vectores propios \(v_i\) son unitarios, sabemos que \(v_i^Tv_i=\|v_i\|_2^2=1\). Por lo tanto:
+
+  \[
+  \|Av_i\|_2=\sqrt{\mu_i}
+  \]
+
+  Reemplazando este resultado en la desigualdad anterior, obtenemos:
+
+  \[
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \leq\frac{\sqrt{\mu_i}\|\eta\|_2}{\mu_i+\lambda}
+  \]
+
+  Ahora aplicando la desigualdad \(\mu_i+\lambda\geq 2\sqrt{\mu_i\lambda}\) para acotar el denominador:
+
+  \[
+  \begin{aligned}
+  \frac{\sqrt{\mu_i}}{\mu_i+\lambda}
+  \leq\frac{\sqrt{\mu_i}}{2\sqrt{\mu_i\lambda}}\
+  =\frac{1}{2\sqrt{\lambda}}
+  \end{aligned}
+  \]
+
+  Por lo tanto, sustituyendo esto en la expresión anterior, queda demostrado que:
+
+  \[
+  \boxed{
+  \left|\frac{\langle Av_i,\eta\rangle}{\mu_i+\lambda}\right|
+  \leq\frac{\|\eta\|_2}{2\sqrt{\lambda}}
+  }
+  \]
+
+  Esta cota depende únicamente de la norma del ruido y del parámetro \(\lambda\), por lo que se mantiene válida sin importar qué tan pequeño sea \(\mu_i\).
+
+  \item \textbf{Interpretación.}
+
+  *********
+
+  \item \textbf{Implementación.} Completen la tabla y comparen las reconstrucciones.
+
+  \begin{table}[H]
+    \centering
+    \begin{tabular}{>{\filatabla}l c c}
+      \toprule[0.8bp]
+                           & $\norm{x}_2$ & $\norm{Ax - b}_2$ \\
+      \midrule[0.4bp]
+      $x_0$                 &3.503e+05        &5.626e-12                  \\
+      $\lambda = 10^{-3.5}$ &37.06            &0.5617                  \\
+      $\lambda = 10^{-2.5}$ &36.02            &0.6169                   \\
+      $\lambda = 1$         &17.18            &17.85                  \\
+      \bottomrule[0.8bp]
+    \end{tabular}
+    \caption{Norma y residuo de cada reconstrucción.}
+    \label{tab:ridge}
+  \end{table}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{reconstrucciones_tikhonov.png}
+    \caption{Comparación de reconstrucciones con distintos valores de \(\lambda\).}
+    \label{fig:comparación_2}
+  \end{figure}
+
+  \subsubsection*{• Análisis de Imagenes y Conclusión}
+
+  Analizando los resultados numéricos y las imagenes obtenidas, se concluye que \(\lambda = 10^{-2.5}\) entrega la mejor reconstrucción. Esto se debe a que permite distinguir con mayor claridad el rostro del mapache, presenta menos distorciones y tiene una norma de \(36.02\), inferior al máximo de \(64\). Además, su residuo de \(0.6169\) es el más cercano al nivel de ruido original \(\delta=0.64\), por lo que logra un mejor equilibrio entre reducir el ruido y conservar los detalles de la imagen en comparación con las otras reconstrucciones.
+\end{enumerate}
+\despueslista
+
+\seccion{(d) Píxeles dañados}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{reconstruccion_danada.png}
+    \caption{Comparación entre la imagen observada con píxeles dañados y su reconstrucción}
+    \label{fig:comparación_3}
+  \end{figure}
+
+\begin{enumerate}[label=\roman*., widest=iii]
+  \item \textbf{$\tilde{\eta} = \eta + (\tilde{b} - b)$ e interpretación de sus sumandos.}
+
+  \subsubsection*{• Demostración $\tilde{\eta} = \eta + (\tilde{b} - b)$}
+
+  Para demostrar que \(\eta=\eta+(\tilde b-b)\), partiremos de la definición para la observación con pixeles dañados \(\tilde b=Ax^\star+\tilde{\eta}\). Despejamos \(\tilde{\eta}\):
+
+  \[
+  \tilde{\eta}=\tilde b-Ax^\star
+  \]
+
+  Por otra parte, de la defición de la observación desenfocada obtenemos \(Ax^\star=b-\eta\). Reemplazamos esto en la ecuación de \(\tilde{\eta}\):
+
+  \[
+  \begin{aligned}
+  \tilde{\eta}
+  &=\tilde b-Ax^\star\\
+  &=\tilde b-(b-\eta)\\
+  &=\eta+(\tilde b-b)
+  \end{aligned}
+  \]
+
+  De esta manera queda demostrado que:
+
+  \[
+  \boxed{\tilde{\eta}=\eta+(\tilde b-b)}
+  \]
+
+  \subsubsection*{• Interpretación de los sumandos}
+
+  *********
+
+  \item \textbf{$\norm{\tilde{b} - b}_2$ y comparación de $\norm{\tilde{\eta}}_2$ con $\delta$.}
+
+  \subsubsection*{• Resultados numéricos}
+
+  \(\|\tilde{b} - b\|_2\): 10.74
+
+  Delta (\(\delta\)): 0.64
+s
+  \subsubsection*{• Comparación}
+
+  Para realizar la comparación, primero calcularemos \(\|\tilde{\eta}\|_2\). Como quedó demostrado en el ítem (d).i que \(\tilde{\eta}=\eta+(\tilde b-b)\), aplicamos la desigualdad triangular para obtener:
+
+  \[
+  \|\tilde{\eta}\|_2 = \|\eta + (\tilde{b} - b)\|_2 \le \|\eta\|_2 + \|\tilde{b} - b\|_2
+  \]
+
+  Sabemos que \(\|\eta\|_2 \approx \delta = 0.64\) y que \(\|\tilde{b} - b\|_2= 10.74\), reemplazamos los valores numéricos y obtenemos:
+
+  \[
+  \boxed{\|\tilde{\eta}\|_2 \le 0.64 + 10.74 = 11.38}
+  \]
+
+  Al comparar \(\norm{\tilde{\eta}}_2\) con el ruido original (\(\delta=0.64\)), podemos observar que el ruido total es considerablemente mayor debido a los píxeles dañados. Esto coincide con lo observado en la reconstrucción, donde el rostro del mapache deja de distinguirse y aparecen numerosas distorsiones. Por lo tanto, los resultados evidencian cómo las alteraciones adicionales en los datos pueden afectar la calidad de la imagen.
+
+  \item \textbf{¿Por qué fracasa la reconstrucción? ¿Bastaría con aumentar $\lambda$?}
+
+  *********
+
+\end{enumerate}
+\despueslista
+
+
+% =====================================================================
+\problema{Red neuronal con dos capas ocultas}
+% =====================================================================
+
+\seccion{(a) Derivada de la sigmoide}
+\begin{enumerate}[label=\roman*]
+  \item \textbf{construcción de $\sigma'$}
+  
+  considerando la funcion:
+  \[\sigma(t)=\frac{1}{1+e^{-t}}\]
+  notamos que podemos realizar una transformacion algebraica tal que
+  \[\frac{1}{1+e^{-t}} = (1+e^{-t})^{-1}\]
+  derivamos haciendo uso de la regla de la cadena:
+
+  \[\sigma'(t)=-(1+e^{-t})^{-2}(-e^{-t}) = \frac{e^{-t}}{(1+e^{-t})^{2}}\]
+
+  comprobamos si se satisface $\sigma'(t) = \sigma(t)(1 - \sigma(t))$
+
+  \[
+  \begin{aligned}
+  \sigma(t)(1-\sigma(t))
+  &= (\frac{1}{1+e^{-t}})(1 - \frac{1}{1+e^{-t}})\\
+  &= \frac{1}{1+e^{-t}} - \frac{1}{(1+e^{-t})^2}\\
+  &= \frac{1 + e^{-t} - 1}{(1+e^{-t})^2}\\
+  &= \frac{e^{-t}}{(1+e^{-t})^2}\\
+  &= \sigma'(t)
+  \end{aligned}
+  \]
+
+  \bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
+  
+  \item \textbf{Deducción de intervalo}
+
+  ya que $\forall t \in \mathbb{R}, \quad (e^{-t} > 0)$, deducimos que $0 < \sigma'(t)$\\
+  Luego notamos que $\sigma(t)(1 - \sigma(t)) = (\sigma^2(t) - \sigma(t)) = (\sigma(t) - \frac{1}{2})^2 - \frac{1}{4}$\\
+  ya que $\forall x \in \mathbb{R}, \quad x^2 \geq 0$, planteamos la siguiente desigualdad:
+
+
+  \[
+  \begin{aligned}
+  (\sigma(t) - \frac{1}{2})^2 &\geq 0\\
+  \Rightarrow \sigma^2(t) - \sigma(t) + \frac{1}{4} &\geq 0\\
+  \Rightarrow \sigma(t) - \sigma^2(t) &\leq \frac{1}{4}\\
+  \Rightarrow \sigma(t)(1-\sigma(t)) &\leq \frac{1}{4}\\
+  \Rightarrow \sigma'(t) &\leq \frac{1}{4}
+  \end{aligned}
+  \]
+
+  Por lo que se deduce que $0 < \sigma'(t) \leq \frac{1}{4}$.
+
+  \item \textbf{Buscar el punto donde $\sigma'$ alcanza su máximo}
+  
+  Para encontrar el máximo de $\sigma'(t)$ podemos usar puntos críticos de $\sigma''(t)$.\\
+  Por regla de la cadena tenemos que:
+
+  \[
+  \begin{aligned}
+  \sigma''(t)
+  &= \frac{-e^{-t}(1+e^{-t})^2 - 2(1+e^{-t})(-e^{-t})(e^{-t})}{(1+e^{-t})^4}\\
+  &= \frac{-e^{-t}(1+e^{-t})-2(-e^{-t})(e^{-t})}{(1+e^{-t})^3}\\
+  &= \frac{-e^{-t}-e^{-2t}+2e^{-2t}}{(1+e^{-t})^3}\\
+  &= \frac{e^{-2t}-e^{-t}}{(1+e^{-t})^3}\\
+  &= \frac{e^{-t}(e^{-t}-1)}{(1+e^{-t})^3}
+  \end{aligned}
+  \]
+
+  Teniendo en cuenta que $\forall t \in \mathbb{R}, e^t \geq 0$\\
+  Buscamos punto crítico:
+
+  \[
+  \frac{e^{-t}(e^{-t}-1)}{(1+e^{-t})^3} = 0
+  \Rightarrow (e^{-t}-1) = 0
+  \Rightarrow e^{-t} = 1
+  \Rightarrow t = 0
+  \]
+
+  notamos que si $t > 0 \rightarrow \sigma''(t) < 0$ y si $t < 0 \rightarrow \sigma''(t) > 0$.\\ Por lo que $\sigma'(t)$ tiene un máximo en $t = 0$
+
+  \[
+  \sigma'(0) = \frac{e^{0}}{(1+e^{0})^{2}} = \frac{1}{4}
+  \]
+\end{enumerate}
+
+\seccion{(b) Función de pérdida y su gradiente}
+
+\begin{enumerate}[label=\roman*]
+
+  \item \textbf{Definir objetos matematicos}
+
+  \[z_{1,i} = a_1x_i+b1, \quad h_{1,i} = \sigma(z_1,i), \quad z_{2,i}=a_2h_{1,i}+b_2, \quad h_{2,i}=\sigma(z_{2,i}),\]
+
+  \[\hat{y}_i=c+vh_{2,i}, \quad e_i=\hat{y}_i-y_i, \quad L_i = \frac{e^2_i}{2}\]
+
+  \[
+    \sigma'(t) = \sigma(t)(1- \sigma(t))
+    \]
+
+  \[
+  \theta = (a_1, b_1, a_2, b_2, v, c)
+  \]
+
+  \item \textbf{Funcion pérdida}
+
+  considerando la función
+  \[J(\theta) = \frac{1}{2N}\sum_{i=1}^{N}(\hat{y}_i - y_i)^2\]
+
+  notamos que con los objetos matematicos previamente definidos,\\
+  esta se puede escribir de multiples formas, tal que:
+
+  \[J(\theta) = \frac{1}{2N}\sum_{i=1}^{N}(e_i)^2 = \frac{1}{N}\sum_{i=1}^{N}Li\]
+
+  esto nos facilitara el desarollo del calculo de las 6 derivadas parciales de $\nabla_\theta J(\theta)$
+
+  \item \textbf{Calcular las 6 derivadas parciales}
+
+
+  \begin{enumerate}[label=\arabic*.]
+    \item derivada parcial respecto a $\alpha_1$
+    
+    $a_1 \longrightarrow z_{1,i} \longrightarrow h_{1,i}\longrightarrow z_{2,i} \longrightarrow h_{2,i}\longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+    \begin{aligned}
+    L_i &= \frac{1}{2}(c+v\sigma(a_2(\sigma(a_1x_i+b_1))+b_2)-y_i)^2\\
+    &\quad\Rightarrow\quad
+    \frac{\partial L_i}{\partial a_1}
+    = (c+v\sigma(a_2(\sigma(a_1x_i+b_1))+b_2)-y_i)
+    (a_2\cdot v \cdot \sigma'(z_{2,i}) \cdot \sigma'(z_{1,i}) \cdot x_i)\\
+    &= (e_i \cdot a_2\cdot v \cdot \sigma'(z_{2,i}) \cdot \sigma'(z_{1,i}) \cdot x_i)\\
+    &= (e_i \cdot a_2\cdot v \cdot h_{2,i}(1 - h_{2,i}) \cdot h_{1,i}(1-h_{1,i}) \cdot x_i)
+    \end{aligned}
+    \]
+
+    \item derivada parcial respecto a $b_1$
+    
+    $b_1 \longrightarrow z_{1,i} \longrightarrow h_{1,i}\longrightarrow z_{2,i} \longrightarrow h_{2,i}\longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+    \begin{aligned}
+    L_i &= \frac{1}{2}(c+v\sigma(a_2(\sigma(a_1x_i+b_1))+b_2) -y_i)^2\\
+    &\quad\Rightarrow\quad
+    \frac{\partial L_i}{\partial b_1}
+    = (c+v\sigma(a_2(\sigma(a_1x_i+b_1))+b_2) -y_i)
+    (a_2\cdot v \cdot \sigma'(z_{2,i}) \cdot \sigma'(z_{1,i}))\\
+    &= e_i \cdot a_2\cdot v \cdot \sigma'(z_{2,i}) \cdot \sigma'(z_{1,i})\\
+    &= e_i \cdot a_2\cdot v \cdot h_{2,i}(1 - h_{2,i}) \cdot h_{1,i}(1-h_{1,i})
+    \end{aligned}
+    \]
+
+    \item derivada parcial respecto a $\alpha_2$
+
+    $a_2 \longrightarrow z_{2,i} \longrightarrow h_{2,i}\longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+    \begin{aligned}
+    L_i &= \frac{1}{2}(c+v\sigma(a_2h_{1,i}+b_2) -y_i)^2\\
+    &\quad\Rightarrow\quad
+    \frac{\partial L_i}{\partial a_2}
+    = (c+v\sigma(a_2h_{1,i}+b_2) -y_i)
+    (h_{1,i}\cdot v \cdot \sigma'(z_{2,i}))\\
+    &= (e_i \cdot h_{1,i}\cdot v \cdot \sigma'(z_{2,i}))\\
+    &= (e_i \cdot h_{1,i}\cdot v \cdot h_{2,i}(1-h_{2,i}))
+    \end{aligned}
+    \]
+
+    \item derivada parcial respecto a $b_2$
+    
+    $b_2 \longrightarrow z_{2,i} \longrightarrow h_{2,i}\longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+      \begin{aligned}
+        L_i &= \frac{1}{2}(c+v\sigma(a_2h_{1,i}+b_2) -y_i)^2\\
+        &\quad\Rightarrow\quad
+        \frac{\partial L_i}{\partial b_2}
+        = (c+v\sigma(a_2h_{1,i}+b_2)-y_i)
+        (v \cdot \sigma'(z_{2,i}))\\
+        &= (e_i\cdot v \cdot \sigma'(z_{2,i}))\\
+        &= (e_i \cdot v \cdot h_{2,i}(1-h_{2,i}))
+      \end{aligned}
+      \]
+
+    \item derivada parcial respecto a $v$
+
+    $v \longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+    L_i = \frac{1}{2}(c+v \cdot h_{2,i} - y_i)^2
+    \quad\Rightarrow\quad
+    \frac{\partial L_i}{\partial v}
+    = ((c+v \cdot h_{2,i} - y_i)h_{2,i})
+    \;=\;(e_i \cdot h_{2,i})
+    \]
+
+    \item derivada parcial respecto a $c$
+    
+    $c \longrightarrow \hat{y}_i \longrightarrow L_i$
+
+    \[
+      L_i = \frac{1}{2}(c+v \cdot h_{2,i} - y_i)^2
+      \quad\Rightarrow\quad
+      \frac{\partial L_i}{\partial c}
+      = (c+v \cdot h_{2,i} - y_i)
+      \;=\;(e_i)
+      \]
+  \end{enumerate}
+
+  \item \textbf{Expresar $\nabla_\theta J(\theta)$}
+  
+  notamos que entre derivadas parciales existen factores repetidos,
+  por lo que a continuación definimos estos para expresar el gradiente de forma completa
+    
+    \[
+  \varphi_{2,i} = e_i \cdot v \cdot h_{2,i}(1-h_{2,i}) ,
+  \quad
+  \varphi_{1,i} = \varphi_{2,i} \cdot h_{1,i}(1-h_{1,i}) \cdot a_2
+  \]
+
+  ya con todo lo necesario, expresamos el gradiente de la siguiente forma:
+  \[
+  \nabla_\theta J(\theta) = \frac{1}{N}\sum_{i=1}^{N}
+  \begin{pmatrix}
+    \varphi_{1,i}x_i \\
+    \varphi_{1,i} \\
+    \varphi_{2,i}h_{1,i} \\
+    \varphi_{2,i} \\
+    e_ih_{2,i} \\
+    e_i
+    \end{pmatrix}
+    \]
+
+\end{enumerate}
+
+  \seccion{(c) Implementación y verificación del gradiente}
+  
+  Reporten $\theta_0$, $J(\theta_0)$ y el error máximo $E$.
+  
+  \begin{table}[H]
+  \centering
+  \begin{tabular}{>{\filatabla}c r r r}
+    \toprule[0.8bp]
+    Parámetro & Fórmula de (b) & $D_j$ & Diferencia \\
+    \midrule[0.4bp]
+    $a_1$ & & & \\
+    $b_1$ & & & \\
+    $a_2$ & & & \\
+    $b_2$ & & & \\
+    $v$   & & & \\
+    $c$   & & & \\
+    \bottomrule[0.8bp]
+  \end{tabular}
+  \caption{Gradiente en $\theta_0$: fórmulas de (b) y diferencias centradas.}
+  \label{tab:gradiente}
+\end{table}
+
+\pendiente
+
+\seccion{(d) Descenso del gradiente}
+
+\pendiente
+
+\seccion{(e) Parámetros encontrados}
+
+\pendiente
+
+\seccion{(f) Sensibilidad del entrenamiento}
+
+\begin{enumerate}[label=\roman*., widest=ii]
+  \item \textbf{Tamaño del paso.}
+
+  \pendiente
+
+  \item \textbf{Distintas inicializaciones.}
+
+  \pendiente
+\end{enumerate}
+\despueslista
+
+\seccion{(g) Datos de otra función}
+
+\begin{enumerate}[label=\roman*., widest=ii]
+  \item \textbf{Entrenamiento.}
+
+  \pendiente
+
+  \item \textbf{Monotonía, cotas y por qué la red no puede aproximar $\tilde{f}$.}
+
+  \pendiente
+\end{enumerate}
+
+% =====================================================================
+\clearpage\markright{}
+\seccionsinnumero{Ejemplos de uso (borren esta sección antes de entregar)}
+% =====================================================================
+
+\seccion{Ecuaciones}
+
+Una ecuación destacada se escribe entre \code{\textbackslash[} y \code{\textbackslash]}:
+\[ \nabla J_0(x) = 2A^T(Ax - b). \]
+Para varias líneas alineadas, usen \code{align*}:
+\begin{align*}
+  J_\lambda(x) &= \norm{Ax - b}_2^2 + \lambda \norm{x}_2^2 \\
+               &= x^T (A^T A + \lambda I) x - 2 (A^T b)^T x + b^T b.
+\end{align*}
+La plantilla define \code{\textbackslash norm\{x\}}, \code{\textbackslash abs\{x\}}, \code{\textbackslash ip\{u\}\{v\}} (producto interno $\ip{u}{v}$), \code{\textbackslash R} ($\R$) y \code{\textbackslash diag}.
+
+\seccion{Figuras}
+
+Guarden la figura desde el notebook en la carpeta \code{figuras/} e inclúyanla así:
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=6cm]{ejemplo_b.png}
+  \caption{Imagen observada $b$ (ejemplo con los datos de la pauta).}
+  \label{fig:ejemplo}
+\end{figure}
+Para referirse a ella, escriban \code{Figura\textasciitilde\textbackslash ref\{fig:ejemplo\}}: Figura~\ref{fig:ejemplo}.
+
+\seccion{Cajas de comentarios}
+
+\begin{nota}[Observación]
+  Si quieren destacar un comentario, usen el entorno \code{nota}.
+\end{nota}
+
+\end{document}
