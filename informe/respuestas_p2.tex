@@ -949,7 +949,7 @@ $J(\theta_{20000}) = 0.0013927707069917585$
     \caption{entrenamiento y curva $x \mapsto \hat{y}(x;\theta_{20.000})$}
     \label{fig:entrenamientoXcurva}
 \end{figure}
-
+\newpage
 \seccion{(f) Sensibilidad del entrenamiento}
 
 \begin{enumerate}[label=\roman*., widest=ii]
@@ -975,7 +975,9 @@ $J(\theta_{20000}) = 0.0013927707069917585$
 
   Cuando el paso es muy grande, el error aumenta de forma veloz y nunca se acerca al valor esperado, mientras que el paso más pequeño reduce el error lentamente, los pasos más cercanos a 1 parecen ser los que reducen el error a una mayor velocidad
 
-  \item \textbf{Distintas inicializaciones.}
+\newpage
+
+\item \textbf{Distintas inicializaciones.}
 
   Repetimos d) con $\alpha = 1$, pero ahora utilizando 10 inicializaciones distintas entre [-1, 1] y otrad 10 entre [-5, 5]
   Los errores obtenidos fueron:
@@ -992,9 +994,11 @@ $\theta_0 \in [-1,1]$ & $\theta_0 \in [-5,5]$ \\
 0.0014076924339753395 & 0.0014261599687102303 \\
 0.0014149900866107252 & 0.0013918742850255864 \\
 \end{tabular}
+
+
   (El orden no es importante ya que no hay relación entre las columnas)
 
-  Como podemos ver, no simepre se alcanza el mismo valor de J, sin embargo se alcanza valores similares, incluso iguales hasta la centésima, de modo que vemos que la aproximación es correcta
+  Como podemos ver, no siempre se alcanza el mismo valor de J, sin embargo, se alcanza valores similares, incluso iguales hasta la centésima, de modo que vemos que la aproximación es correcta
   Sin embargo [-5,5] presenta errores mayores, lo que se debe a que al tener un |t| grande la función σ′(t) se asemeja demasiado a cero lo que afecta a la resta en el cálculo de la gradiente, evitando que el valor varíe adecuadamente
   El descenso no garantiza alcanzar el mínimo global de J, ya que no es seguro que la aproximación llegue a ser exacta, sin importar cuanto se asemeje al valor esperado.
 
@@ -1010,7 +1014,39 @@ $\theta_0 \in [-1,1]$ & $\theta_0 \in [-5,5]$ \\
 
   \item \textbf{Monotonía, cotas y por qué la red no puede aproximar $\tilde{f}$.}
 
-  \pendiente
+  **1. Demostración de monotonía de $\hat{y}(x;\theta)$**
+
+Sabemos por la definición de la red que la función de predicción es:
+$$ \hat{y}(x; \theta) = c + v \cdot \sigma(a_2 \cdot \sigma(a_1x + b_1) + b_2) $$
+
+Si derivamos $\hat{y}$ con respecto a $x$ aplicando la regla de la cadena (como se calculó en el inciso b), obtenemos:
+$$ \frac{d\hat{y}}{dx} = v \cdot \sigma'(z_2) \cdot a_2 \cdot \sigma'(z_1) \cdot a_1 $$
+*(Donde $z_1 = a_1x + b_1$ y $z_2 = a_2\sigma(z_1) + b_2$)*.
+
+En el inciso (a) demostramos que la derivada de la función sigmoide es siempre estrictamente positiva ($0 < \sigma'(t) \le \frac{1}{4}$). Dado que $\sigma'(z_1) > 0$ y $\sigma'(z_2) > 0$ para cualquier valor de $x$, el signo de la derivada $\frac{d\hat{y}}{dx}$ depende exclusivamente del producto de los parámetros constantes: $(v \cdot a_2 \cdot a_1)$.
+
+Dado que $v, a_2$ y $a_1$ son constantes fijas para un $\theta$ dado, su producto no puede cambiar de signo. En consecuencia, la derivada no cambia de signo en todo $\mathbb{R}$, lo que demuestra que la función $x \mapsto \hat{y}(x;\theta)$ es **estrictamente monótona** (siempre creciente o siempre decreciente dependiendo del signo del producto $v \cdot a_2 \cdot a_1$).
+
+**2. Demostración de los límites de la salida**
+
+La última capa de la red neuronal está definida como:
+$$ \hat{y} = c + v \cdot h_2 $$
+Donde $h_2 = \sigma(z_2)$. 
+
+Sabemos que el recorrido de la función de activación sigmoide es estrictamente el intervalo abierto $(0, 1)$. Por lo tanto, $0 < h_2 < 1$. 
+Si evaluamos los casos extremos para $h_2$:
+* Cuando $h_2 \to 0$, $\hat{y} \to c + v(0) = c$.
+* Cuando $h_2 \to 1$, $\hat{y} \to c + v(1) = c + v$.
+
+De esto concluimos que, independientemente del valor de entrada $x$ o de los parámetros $\theta$, la predicción de la red $\hat{y}$ está siempre **acotada** en el intervalo comprendido entre $c$ y $c+v$.
+
+**3. Conclusión sobre el ajuste a los nuevos datos $\tilde{f}$**
+
+Al observar el gráfico de dispersión del inciso (g.i), los nuevos datos $\tilde{f}$ tienen un comportamiento claramente **no monótono** en el intervalo $[-1, 1]$ (la curva sube hasta formar un pico y luego desciende). 
+
+Como se demostró en los puntos anteriores, la arquitectura de esta red neuronal específica (dos capas ocultas con una sola neurona cada una) solo tiene la capacidad matemática de representar funciones que sean **estrictamente monótonas y acotadas**. 
+
+Debido a esta limitación estructural, la red es incapaz de "doblarse" para reflejar subidas y bajadas. Por lo tanto, es matemáticamente imposible que esta red se ajuste de forma correcta a la función $\tilde{f}$, sin importar cuántas iteraciones se realicen en el entrenamiento, el tamaño del paso ($\alpha$) elegido o los valores de inicialización ($\theta_0$).
 \end{enumerate}
 
 % =====================================================================
