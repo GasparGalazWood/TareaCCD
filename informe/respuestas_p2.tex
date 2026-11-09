@@ -935,10 +935,20 @@ s
 
 La grafica presenta un comportamiento decreciente no lineal, inicialmente el error disminuye de manera suave, luego aproximadamente en el rango de iteraciones [90, 160] la funcion desciende abruptamente, hasta que se estabiliza en un valor cercano a 0, indicando que esta ha llegado a un minimo, tal que el comportamiento del método de descenso gradiente converge rapidamiente a un minimo cercano a 0.
 
+\bigskip\bigskip\bigskip\bigskip
 
 \seccion{(e) Parámetros encontrados}
 
-\pendiente
+Los valores encontrados:\\
+$\theta_{20000} \approx (4.8207018, 0.6801908, -4.0540688, 0.6141261, 3.5773664, -0.1000645)$\\
+$J(\theta_{20000}) = 0.0013927707069917585$
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figuras/figuras_p2/entrenamientoXcurva.png}
+    \caption{entrenamiento y curva $x \mapsto \hat{y}(x;\theta_{20.000})$}
+    \label{fig:entrenamientoXcurva}
+\end{figure}
 
 \seccion{(f) Sensibilidad del entrenamiento}
 
